@@ -1,0 +1,11 @@
+[
+  {
+    "id": "teflon-iss-alarm",
+    "material": "Teflon",
+    "evidence_type": "detector_response",
+    "detector": "ISS light-scattering detector",
+    "reported_result": "The tested detector would have stayed below its alarm threshold in approximately two-thirds of the reported Teflon smoke tests.",
+    "limitation": "This result applies to the conditions that were tested in the study.",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9"
+  }
+]
