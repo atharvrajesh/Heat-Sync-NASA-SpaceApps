@@ -41,12 +41,15 @@ function loadModel() {
   return modelPromise;
 }
 
-async function rankEvidence(candidates, question) {
+// default text for the evidence cards
+function describeEvidence(record) {
+  return [record.material, record.detector, record.reported_result, record.conditions]
+    .filter(Boolean).join(" ");
+}
+
+export async function rankEvidence(candidates, question, describe = describeEvidence) {
   const model = await loadModel();
-  const descriptions = candidates.map(record =>
-    [record.material, record.detector, record.reported_result, record.conditions]
-      .filter(Boolean).join(" ")
-  );
+  const descriptions = candidates.map(describe);
   const embeddings = await model([question, ...descriptions], {
     pooling: "mean",
     normalize: true
