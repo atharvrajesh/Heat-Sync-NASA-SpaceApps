@@ -8,25 +8,59 @@ const results = document.querySelector("#inv-results");
 let investigations = [];
 
 const answerBox = document.querySelector("#inv-answer");
+const answerStatus = document.querySelector("#inv-answer-status");
 const answerUrl = "https://tsyauoaem6mxk5lasqdk2twyyq0stteq.lambda-url.us-east-2.on.aws/";
+let answerRequest;
+
+function renderAnswer(answer, topRecords) {
+    const sources = new Map(topRecords.map(record => [record.id, record.source_url]));
+    const citations = [...answer.matchAll(/\bPSI-\d+\b/g)];
+    if (!citations.length || citations.some(citation => !sources.has(citation[0]))) {
+        answerStatus.textContent = "No AI summary with matching NASA citations is available for this question.";
+        return;
+    }
+
+    answerBox.append("AI summary from the top-ranked investigations: ");
+    let cursor = 0;
+    for (const citation of citations) {
+        const id = citation[0];
+        const link = document.createElement("a");
+        link.href = sources.get(id);
+        link.textContent = id;
+        answerBox.append(answer.slice(cursor, citation.index), link);
+        cursor = citation.index + id.length;
+    }
+    answerBox.append(answer.slice(cursor));
+    answerBox.hidden = false;
+    answerStatus.textContent = "AI summary ready.";
+}
 
 async function showAnswer(question, topRecords) {
+    const request = new AbortController();
+    answerRequest = request;
+    const timeout = setTimeout(() => request.abort(), 30000);
+    answerStatus.textContent = "Preparing an AI summary...";
+
     try {
         const response = await fetch(answerUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ question, ids: topRecords.map(record => record.id) })
+            body: JSON.stringify({ question, ids: topRecords.map(record => record.id) }),
+            signal: request.signal
         });
-        if (!response.ok) return;
+        if (!response.ok) throw new Error("Could not load the AI summary.");
 
         const result = await response.json();
-        if (!result.answer) return;
-
-        answerBox.textContent = "AI summary of the top three records: " + result.answer;
-        answerBox.hidden = false;
-    } catch (error) {
-        // the ranked list still works without the summary
-        console.warn("Could not get a summary.", error);
+        if (answerRequest !== request) return;
+        if (typeof result?.answer !== "string") throw new Error("Invalid AI summary response.");
+        renderAnswer(result.answer, topRecords);
+    } catch {
+        if (answerRequest === request) {
+            answerStatus.textContent = "The AI summary is unavailable. You can still review the ranked records below.";
+        }
+    } finally {
+        clearTimeout(timeout);
+        if (answerRequest === request) answerRequest = undefined;
     }
 }
 
@@ -69,7 +103,12 @@ async function rankInvestigations() {
     if (!question) return;
 
     rankButton.disabled = true;
+    // discard the previous summary as soon as a new search starts
+    answerRequest?.abort();
+    answerRequest = undefined;
+    answerStatus.textContent = "";
     answerBox.hidden = true;
+    answerBox.replaceChildren();
     status.textContent = "Ranking...";
 
     try {
@@ -96,11 +135,13 @@ async function loadInvestigations() {
 
         investigations = await response.json();
         showInvestigations(investigations);
+        rankButton.disabled = false;
     } catch (error) {
         status.textContent = "Could not load the investigations.";
         console.error(error);
     }
 }
 
+rankButton.disabled = true;
 rankButton.addEventListener("click", rankInvestigations);
 loadInvestigations();

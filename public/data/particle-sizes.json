@@ -1,0 +1,13 @@
+{
+  "unit": "nm",
+  "method": "Arithmetic mean diameter from moment instruments",
+  "sourceReference": "SAME Final Science Report, Table 1, printed page 18",
+  "sourceUrl": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25",
+  "ageSeconds": 720,
+  "measurements": [
+    { "material": "Kapton", "baseline": 105, "aged": 186 },
+    { "material": "Teflon", "baseline": 205, "aged": 273 },
+    { "material": "Cotton lamp wick", "baseline": 227, "aged": 308 },
+    { "material": "Silicone rubber", "baseline": 257, "aged": 422 }
+  ]
+}

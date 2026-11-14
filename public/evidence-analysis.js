@@ -5,6 +5,7 @@ const analyzeButton = document.querySelector("#analyze");
 const status = document.querySelector("#analysis-status");
 const results = document.querySelector("#analysis-results");
 const followUp = document.querySelector("#follow-up-test");
+const moonContext = document.querySelector("#moon-context");
 
 let records = [];
 let modelPromise;
@@ -19,6 +20,7 @@ function clearAnalysis() {
   analysisRun += 1;
   results.replaceChildren();
   followUp.hidden = true;
+  moonContext.hidden = true;
   status.textContent = "";
   analyzeButton.disabled = records.length === 0;
 }
@@ -92,6 +94,7 @@ async function analyzeEvidence() {
 
   if (environmentSelect.value === "moon") {
     status.textContent = "These records contain no lunar-gravity detector tests for " + material + ".";
+    moonContext.hidden = false;
     return;
   }
 
