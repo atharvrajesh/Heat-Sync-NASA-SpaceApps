@@ -16,14 +16,21 @@
     }
 
     article {
+      margin-top: 20px;
+      padding: 20px;
       background: white;
       border: 1px solid #d2d9e0;
       border-radius: 8px;
-      padding: 20px;
     }
 
     h2 {
       margin-top: 0;
+    }
+
+    select {
+      margin-left: 8px;
+      padding: 6px;
+      font: inherit;
     }
   </style>
 </head>
@@ -31,22 +38,72 @@
   <main>
     <p>Team Heat Sync</p>
     <h1>Alarm Gap</h1>
-    <p>How did the ISS smoke detector respond to smoke from overheated Teflon?</p>
+    <p>How did the tested ISS smoke detector respond to smoke from different materials?</p>
+
+    <label for="material">Material</label>
+    <select id="material" disabled>
+      <option value="Teflon">Teflon</option>
+      <option value="Kapton">Kapton</option>
+    </select>
 
     <p id="status" role="status">Loading evidence...</p>
 
-    <article id="evidence" hidden>
-      <h2 id="detector"></h2>
-      <p id="result"></p>
-      <p id="limitation"></p>
-      <a id="source">See Figure 9 in the study</a>
+    <article id="detector-card" hidden>
+      <h2 id="detector-name"></h2>
+      <p id="detector-result"></p>
+      <p id="detector-limit"></p>
+      <a id="detector-source">See Figure 9 in the study</a>
+    </article>
+
+    <article id="test-card" hidden>
+      <h2>NASA SAME Test Conditions</h2>
+      <p id="test-conditions"></p>
+      <p id="test-limit"></p>
+      <a id="test-source">See the NASA experiment record</a>
     </article>
   </main>
 
   <script>
-    async function loadEvidence() {
-      const status = document.querySelector("#status");
+    const materialSelect = document.querySelector("#material");
+    const status = document.querySelector("#status");
+    const detectorCard = document.querySelector("#detector-card");
+    const testCard = document.querySelector("#test-card");
 
+    function showEvidence(records) {
+      const material = materialSelect.value;
+
+      const detector = records.find(record =>
+        record.material === material &&
+        record.evidence_type === "detector_response"
+      );
+
+      const test = records.find(record =>
+        record.material === material &&
+        record.evidence_type === "test_conditions"
+      );
+
+      detectorCard.hidden = !detector;
+      testCard.hidden = !test;
+      status.textContent = "";
+
+      if (detector) {
+        document.querySelector("#detector-name").textContent = detector.detector;
+        document.querySelector("#detector-result").textContent = detector.reported_result;
+        document.querySelector("#detector-limit").textContent = detector.limitation;
+        document.querySelector("#detector-source").href = detector.source_url;
+        status.textContent = "Showing evidence for " + material + ".";
+      } else {
+        status.textContent = "No detector finding is available for " + material + ".";
+      }
+
+      if (test) {
+        document.querySelector("#test-conditions").textContent = test.conditions;
+        document.querySelector("#test-limit").textContent = test.limitation;
+        document.querySelector("#test-source").href = test.source_url;
+      }
+    }
+
+    async function loadEvidence() {
       try {
         const response = await fetch("./data/evidence.json");
 
@@ -55,21 +112,16 @@
         }
 
         const records = await response.json();
-        const record = records.find(item => item.id === "teflon-iss-alarm");
 
-        if (!record) {
-          status.textContent = "The Teflon record is missing from evidence.json.";
-          return;
+        if (!Array.isArray(records)) {
+          throw new Error("Expected a list of evidence records.");
         }
 
-        document.querySelector("#detector").textContent = record.detector;
-        document.querySelector("#result").textContent = record.reported_result;
-        document.querySelector("#limitation").textContent = record.limitation;
-        document.querySelector("#source").href = record.source_url;
-        document.querySelector("#evidence").hidden = false;
-        status.textContent = "";
+        showEvidence(records);
+        materialSelect.addEventListener("change", () => showEvidence(records));
+        materialSelect.disabled = false;
       } catch (error) {
-        status.textContent = "Check that data/evidence.json exists and contains a JSON array.";
+        status.textContent = "Could not load the evidence. Check public/data/evidence.json.";
         console.error(error);
       }
     }
