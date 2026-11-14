@@ -56,7 +56,7 @@
       padding: 0;
     }
 
-    .particle-chart li + li {
+    .particle-chart li+li {
       margin-top: 16px;
     }
 
@@ -120,10 +120,10 @@
     <section aria-labelledby="inv-title">
       <h2 id="inv-title">Which NASA investigations matter for my question?</h2>
       <label for="inv-question">Question</label>
-      <input id="inv-question" size="45"
-        placeholder="e.g. detecting smoke from overheated plastics">
+      <input id="inv-question" size="45" placeholder="e.g. detecting smoke from overheated plastics">
       <button id="inv-rank" type="button">Rank investigations</button>
       <p id="inv-status" role="status"></p>
+      <p id="inv-answer" hidden></p>
       <ol id="inv-results"></ol>
     </section>
     <section aria-labelledby="analysis-title">
@@ -214,7 +214,8 @@
       <p>The reported mean diameter was larger after aging for all four materials.
         Matching smoke age would make a follow-up detector comparison easier to interpret.
         The detector study describes the alarm thresholds separately.</p>
-      <p><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25">See SAME Final Science Report, Table 1</a></p>
+      <p><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25">See SAME Final Science Report,
+          Table 1</a></p>
     </section>
   </main>
 
@@ -330,7 +331,7 @@
 
     loadEvidence();
   </script>
- <script type="module" src="./investigations.js"></script>
+  <script type="module" src="./investigations.js"></script>
 </body>
 
 </html>

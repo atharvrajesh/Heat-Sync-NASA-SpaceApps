@@ -7,6 +7,29 @@ const results = document.querySelector("#inv-results");
 
 let investigations = [];
 
+const answerBox = document.querySelector("#inv-answer");
+const answerUrl = "https://tsyauoaem6mxk5lasqdk2twyyq0stteq.lambda-url.us-east-2.on.aws/";
+
+async function showAnswer(question, topRecords) {
+    try {
+        const response = await fetch(answerUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question, ids: topRecords.map(record => record.id) })
+        });
+        if (!response.ok) return;
+
+        const result = await response.json();
+        if (!result.answer) return;
+
+        answerBox.textContent = "AI summary of the top three records: " + result.answer;
+        answerBox.hidden = false;
+    } catch (error) {
+        // the ranked list still works without the summary
+        console.warn("Could not get a summary.", error);
+    }
+}
+
 // the text the model compares against the question
 function describeInvestigation(record) {
     return [
@@ -46,12 +69,14 @@ async function rankInvestigations() {
     if (!question) return;
 
     rankButton.disabled = true;
+    answerBox.hidden = true;
     status.textContent = "Ranking...";
 
     try {
         const ranked = await rankEvidence(investigations, question, describeInvestigation);
         showInvestigations(ranked);
         status.textContent = "Ranked by the browser model for your question.";
+        showAnswer(question, ranked.slice(0, 3));
     } catch (error) {
         console.warn("Could not rank the investigations.", error);
         showInvestigations(investigations);
