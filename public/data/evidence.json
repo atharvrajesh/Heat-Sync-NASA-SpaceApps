@@ -28,5 +28,16 @@
     "limitation": "This row describes the test setup. Alarm threshold findings are listed separately.",
     "source_reference": "PSI-102 Experimental Table, sample 1",
     "source_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-102"
+  },
+  {
+    "id": "same-teflon-test-25",
+    "material": "Teflon",
+    "evidence_type": "detector_response",
+    "detector": "ISS and Space Shuttle detectors",
+    "reported_result": "In SAME Test 25, the Shuttle detector showed a strong signal while the ISS detector signal was more erratic.",
+    "conditions": "The report shows instrument signals from a single Teflon smoke test.",
+    "limitation": "This example compares signals. The figure does not establish a comparative alarm rate.",
+    "source_reference": "SAME Final Science Report, Figure 12",
+    "source_url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=24"
   }
 ]

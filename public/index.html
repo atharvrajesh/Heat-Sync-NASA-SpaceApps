@@ -17,7 +17,8 @@
     }
 
     /* card styles */
-    article {
+    article,
+    section {
       margin-top: 20px;
       padding: 20px;
       background: white;
@@ -48,6 +49,40 @@
     button:disabled {
       cursor: not-allowed;
       opacity: 0.6;
+    }
+
+    .particle-chart {
+      list-style: none;
+      padding: 0;
+    }
+
+    .particle-chart li + li {
+      margin-top: 16px;
+    }
+
+    .particle-bar {
+      display: grid;
+      grid-template-columns: 5.5rem minmax(0, 1fr) 4rem;
+      gap: 8px;
+      align-items: center;
+      margin: 4px 0;
+    }
+
+    .particle-track {
+      height: 10px;
+      background: #e8edf2;
+      border-radius: 4px;
+    }
+
+    .particle-track span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #237074;
+    }
+
+    .particle-bar.aged .particle-track span {
+      background: #9a4427;
     }
   </style>
 </head>
@@ -82,10 +117,102 @@
       <p id="test-limit"></p>
       <a id="test-source">See the NASA experiment record</a>
     </article>
+
+    <section aria-labelledby="analysis-title">
+      <h2 id="analysis-title">Explore the evidence</h2>
+      <p>
+        <label for="analysis-question">Question</label>
+        <select id="analysis-question">
+          <option value="detector_response">How did the detector respond?</option>
+          <option value="compare_detectors">How did the ISS and Shuttle detectors compare?</option>
+          <option value="test_conditions">What conditions did NASA report?</option>
+        </select>
+      </p>
+      <p>
+        <label for="analysis-environment">Environment</label>
+        <select id="analysis-environment">
+          <option value="microgravity">ISS microgravity</option>
+          <option value="moon">Moon gravity</option>
+        </select>
+      </p>
+      <button id="analyze" type="button" disabled>Rank evidence</button>
+      <p id="analysis-status" role="status"></p>
+      <ol id="analysis-results" aria-label="Ranked evidence"></ol>
+      <p id="follow-up-test" hidden>
+        Proposed test: Compare the ISS and Shuttle detector types with the same
+        Teflon smoke exposure, airflow, and smoke aging time. That would help
+        isolate how the detector type affects the response.
+      </p>
+    </section>
+
+    <section aria-labelledby="particle-title">
+      <h2 id="particle-title">How smoke particles change as they age</h2>
+      <p>NASA's SAME flight tests reported the arithmetic mean smoke particle diameter
+        at baseline and after 720 seconds of aging. All bars use the same 0 to 450 nm scale.</p>
+      <ul class="particle-chart" aria-label="Arithmetic mean particle diameter by material">
+        <li>
+          <strong>Kapton</strong>
+          <div class="particle-bar">
+            <span>Baseline</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 23.3%"></span></span>
+            <span>105 nm</span>
+          </div>
+          <div class="particle-bar aged">
+            <span>Aged</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 41.3%"></span></span>
+            <span>186 nm</span>
+          </div>
+        </li>
+        <li>
+          <strong>Teflon</strong>
+          <div class="particle-bar">
+            <span>Baseline</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 45.6%"></span></span>
+            <span>205 nm</span>
+          </div>
+          <div class="particle-bar aged">
+            <span>Aged</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 60.7%"></span></span>
+            <span>273 nm</span>
+          </div>
+        </li>
+        <li>
+          <strong>Cotton lamp wick</strong>
+          <div class="particle-bar">
+            <span>Baseline</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 50.4%"></span></span>
+            <span>227 nm</span>
+          </div>
+          <div class="particle-bar aged">
+            <span>Aged</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 68.4%"></span></span>
+            <span>308 nm</span>
+          </div>
+        </li>
+        <li>
+          <strong>Silicone rubber</strong>
+          <div class="particle-bar">
+            <span>Baseline</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 57.1%"></span></span>
+            <span>257 nm</span>
+          </div>
+          <div class="particle-bar aged">
+            <span>Aged</span>
+            <span class="particle-track" aria-hidden="true"><span style="width: 93.8%"></span></span>
+            <span>422 nm</span>
+          </div>
+        </li>
+      </ul>
+      <p>The reported mean diameter was larger after aging for all four materials.
+        Matching smoke age would make a follow-up detector comparison easier to interpret.
+        The detector study describes the alarm thresholds separately.</p>
+      <p><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25">See SAME Final Science Report, Table 1</a></p>
+    </section>
   </main>
 
-  <script>
-    // get elements from page
+  <script type="module">
+    import { setAnalysisEvidence } from "./evidence-analysis.js";
+
     const materialSelect = document.querySelector("#material");
     const status = document.querySelector("#status");
     const detectorCard = document.querySelector("#detector-card");
@@ -93,7 +220,6 @@
     const downloadButton = document.querySelector("#download-csv");
     let visibleRecords = [];
 
-    // show data on page
     function showEvidence(records) {
       const material = materialSelect.value;
 
@@ -131,13 +257,12 @@
       }
     }
 
-    // helper to escape commas and quotes
+    // keep commas and quotes inside a single csv field
     function csvCell(value) {
       const text = String(value ?? "");
       return '"' + text.replaceAll('"', '""') + '"';
     }
 
-    // make csv and download
     function downloadCsv(records, material) {
       const columns = [
         ["Material", "material"],
@@ -167,12 +292,10 @@
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-    // function for button
     downloadButton.addEventListener("click", () => {
       downloadCsv(visibleRecords, materialSelect.value);
     });
 
-    // load json data
     async function loadEvidence() {
       try {
         const response = await fetch("./data/evidence.json");
@@ -188,6 +311,7 @@
         }
 
         showEvidence(records);
+        setAnalysisEvidence(records);
         materialSelect.addEventListener("change", () => showEvidence(records));
         materialSelect.disabled = false;
       } catch (error) {
@@ -196,7 +320,6 @@
       }
     }
 
-    // start loading
     loadEvidence();
   </script>
 </body>
