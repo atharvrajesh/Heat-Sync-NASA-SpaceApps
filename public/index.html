@@ -117,7 +117,15 @@
       <p id="test-limit"></p>
       <a id="test-source">See the NASA experiment record</a>
     </article>
-
+    <section aria-labelledby="inv-title">
+      <h2 id="inv-title">Which NASA investigations matter for my question?</h2>
+      <label for="inv-question">Question</label>
+      <input id="inv-question" size="45"
+        placeholder="e.g. detecting smoke from overheated plastics">
+      <button id="inv-rank" type="button">Rank investigations</button>
+      <p id="inv-status" role="status"></p>
+      <ol id="inv-results"></ol>
+    </section>
     <section aria-labelledby="analysis-title">
       <h2 id="analysis-title">Explore the evidence</h2>
       <p>
@@ -322,6 +330,7 @@
 
     loadEvidence();
   </script>
+ <script type="module" src="./investigations.js"></script>
 </body>
 
 </html>
