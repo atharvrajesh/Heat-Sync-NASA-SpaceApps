@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alarm Gap</title>
+  <style>
+    body {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+      background: #f4f6f8;
+      color: #17212b;
+    }
+
+    article {
+      background: white;
+      border: 1px solid #d2d9e0;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p>Team Heat Sync</p>
+    <h1>Alarm Gap</h1>
+    <p>How did the ISS smoke detector respond to smoke from overheated Teflon?</p>
+
+    <p id="status" role="status">Loading evidence...</p>
+
+    <article id="evidence" hidden>
+      <h2 id="detector"></h2>
+      <p id="result"></p>
+      <p id="limitation"></p>
+      <a id="source">See Figure 9 in the study</a>
+    </article>
+  </main>
+
+  <script>
+    async function loadEvidence() {
+      const status = document.querySelector("#status");
+
+      try {
+        const response = await fetch("./data/evidence.json");
+
+        if (!response.ok) {
+          throw new Error("Could not load evidence.json.");
+        }
+
+        const records = await response.json();
+        const record = records.find(item => item.id === "teflon-iss-alarm");
+
+        if (!record) {
+          status.textContent = "The Teflon record is missing from evidence.json.";
+          return;
+        }
+
+        document.querySelector("#detector").textContent = record.detector;
+        document.querySelector("#result").textContent = record.reported_result;
+        document.querySelector("#limitation").textContent = record.limitation;
+        document.querySelector("#source").href = record.source_url;
+        document.querySelector("#evidence").hidden = false;
+        status.textContent = "";
+      } catch (error) {
+        status.textContent = "Check that data/evidence.json exists and contains a JSON array.";
+        console.error(error);
+      }
+    }
+
+    loadEvidence();
+  </script>
+</body>
+</html>
