@@ -91,8 +91,32 @@
   <main>
     <p>Team Heat Sync</p>
     <h1>Alarm Gap</h1>
-    <p>How did the tested ISS smoke detector respond to smoke from different materials?</p>
+    <p><strong>A smoke alarm only helps if it goes off.</strong></p>
+    <p>During Artemis II, a smoke alarm sounded about 80,000 miles from home.
+      In NASA's SAME tests on the ISS, the tested station smoke detector would have
+      stayed below its alarm threshold in about two-thirds of Teflon smoke tests
+      and over half of Kapton smoke tests, under the conditions studied.</p>
+    <p>Alarm Gap is for spacecraft fire-safety researchers. It ranks NASA's
+      microgravity combustion investigations for your question, summarizes the top
+      matches with AI, shows the detector evidence with its limits, and proposes
+      the next test to run.</p>
+    <p>Why now: NASA expects Moon Base air to hold 30% oxygen or more, which makes
+      materials more flammable, and its PSI database has no partial-gravity
+      combustion data yet.
+      <a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/">Challenge background</a>
+    </p>
 
+    <section aria-labelledby="inv-title">
+      <h2 id="inv-title">Which NASA investigations matter for my question?</h2>
+      <label for="inv-question">Question</label>
+      <input id="inv-question" size="45" placeholder="e.g. detecting smoke from overheated plastics">
+      <button id="inv-rank" type="button">Rank investigations</button>
+      <p id="inv-status" role="status"></p>
+      <p id="inv-answer" hidden></p>
+      <p id="inv-answer" hidden></p>
+      <ol id="inv-results"></ol>
+    </section>
+    <h2>Detector evidence by material</h2>
     <!-- dropdown and download button -->
     <label for="material">Material</label>
     <select id="material" disabled>
@@ -117,16 +141,7 @@
       <p id="test-limit"></p>
       <a id="test-source">See the NASA experiment record</a>
     </article>
-    <section aria-labelledby="inv-title">
-      <h2 id="inv-title">Which NASA investigations matter for my question?</h2>
-      <label for="inv-question">Question</label>
-      <input id="inv-question" size="45" placeholder="e.g. detecting smoke from overheated plastics">
-      <button id="inv-rank" type="button">Rank investigations</button>
-      <p id="inv-status" role="status"></p>
-            <p id="inv-answer" hidden></p>
-      <p id="inv-answer" hidden></p>
-      <ol id="inv-results"></ol>
-    </section>
+
     <section aria-labelledby="analysis-title">
       <h2 id="analysis-title">Explore the evidence</h2>
       <p>
