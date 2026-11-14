@@ -7,5 +7,26 @@
     "reported_result": "The tested detector would have stayed below its alarm threshold in approximately two-thirds of the reported Teflon smoke tests.",
     "limitation": "This result applies to the conditions that were tested in the study.",
     "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9"
+  },
+  {
+    "id": "kapton-iss-alarm",
+    "material": "Kapton",
+    "evidence_type": "detector_response",
+    "detector": "ISS light-scattering detector",
+    "reported_result": "The tested ISS detector would have stayed below its alarm threshold in over half of the reported Kapton smoke tests.",
+    "conditions": "Microgravity tests using smoke from overheated Kapton.",
+    "limitation": "This result applies to the conditions tested in the study.",
+    "source_reference": "Section 3.2 and Figure 9",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9"
+  },
+  {
+    "id": "same-teflon-sample-1",
+    "material": "Teflon",
+    "evidence_type": "test_conditions",
+    "reported_result": "The SAME table lists an airflow of 5 cm/s, a weight loss rate of 2 mg/min, and a smoke aging duration of 1 minute for sample 1.",
+    "conditions": "Airflow: 5 cm/s. Weight loss rate: 2 mg/min. Smoke aging time: 1 minute.",
+    "limitation": "This row describes the test setup. Alarm threshold findings are listed separately.",
+    "source_reference": "PSI-102 Experimental Table, sample 1",
+    "source_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-102"
   }
 ]
