@@ -94,7 +94,7 @@
     "objective": "Cool flames investigation with gases. Includes the highest oxygen concentrations tested in microgravity in PSI.",
     "fuel": "Flammable gas such as propane, mixed with nitrogen in the chamber.",
     "conditions": "Oxygen-nitrogen mixture of up to 85% oxygen flowing from a spherical burner.",
-    "measurements": "Unknown, not able to have been found.",
+    "measurements": "",
     "hardware": "ACME insert in the Combustion Integrated Rack (CIR)",
     "source_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-159"
   }
