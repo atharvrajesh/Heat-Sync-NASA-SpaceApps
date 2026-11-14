@@ -113,7 +113,6 @@
       <button id="inv-rank" type="button">Rank investigations</button>
       <p id="inv-status" role="status"></p>
       <p id="inv-answer" hidden></p>
-      <p id="inv-answer" hidden></p>
       <ol id="inv-results"></ol>
     </section>
     <h2>Detector evidence by material</h2>
@@ -167,6 +166,15 @@
         Teflon smoke exposure, airflow, and smoke aging time. That would help
         isolate how the detector type affects the response.
       </p>
+
+      <h3>Ask your own question</h3>
+      <label for="ask-question">Question</label>
+      <input id="ask-question" size="45"
+        placeholder="e.g. Did the ISS detector catch Kapton smoke?">
+      <button id="ask-button" type="button">Ask the evidence</button>
+      <p id="ask-status" role="status"></p>
+      <p id="ask-answer" hidden></p>
+      <ol id="ask-sources"></ol>
     </section>
 
     <section aria-labelledby="particle-title">
@@ -348,6 +356,7 @@
     loadEvidence();
   </script>
   <script type="module" src="./investigations.js"></script>
+  <script type="module" src="./evidence-ask.js"></script>
 </body>
 
 </html>

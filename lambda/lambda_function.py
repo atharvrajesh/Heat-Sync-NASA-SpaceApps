@@ -7,6 +7,7 @@ import urllib.request
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "openai/gpt-oss-120b"
 DATA_URL = "https://main.d10dgoqf0gsajx.amplifyapp.com/data/investigations.json"
+EVIDENCE_URL = "https://main.d10dgoqf0gsajx.amplifyapp.com/data/evidence.json"
 
 INSTRUCTIONS = (
     "You help spacecraft fire-safety researchers. Answer the question using only "
@@ -18,7 +19,17 @@ INSTRUCTIONS = (
     "Never say what other records contain or lack."
 )
 
+EVIDENCE_INSTRUCTIONS = (
+    "You help spacecraft fire-safety researchers read smoke detector evidence. "
+    "Answer the question using only the evidence records provided. Write at most three sentences. "
+    "End every sentence with the id of the record it came from in square brackets, like [teflon-iss-alarm]. "
+    "Stay close to the wording of the records and keep each record's limitation in mind. "
+    "Do not add numbers, names, effects, or facts that are not in the records. "
+    "If the records do not answer the question, reply only with: NO_EVIDENCE"
+)
+
 records_by_id = None
+evidence_by_id = None
 
 
 def load_records():
@@ -30,6 +41,17 @@ def load_records():
             records = json.load(response)
         records_by_id = {record["id"]: record for record in records}
     return records_by_id
+
+
+def load_evidence():
+    # same idea as load_records, for the detector evidence file
+    global evidence_by_id
+    if evidence_by_id is None:
+        request = urllib.request.Request(EVIDENCE_URL, headers={"User-Agent": "alarm-gap"})
+        with urllib.request.urlopen(request, timeout=10) as response:
+            records = json.load(response)
+        evidence_by_id = {record["id"]: record for record in records}
+    return evidence_by_id
 
 
 def reply(status, body):
@@ -54,20 +76,20 @@ def tidy(text):
     return text.strip()
 
 
-def keep_cited(text):
+def keep_cited(text, pattern=r"PSI-\d+"):
     # a sentence with no record id has nothing backing it, so it goes
     sentences = re.split(r"(?<=[.!?])\s+", text)
-    return " ".join(s for s in sentences if re.search(r"PSI-\d+", s))
+    return " ".join(s for s in sentences if re.search(pattern, s))
 
 
-def ask_model(question, records):
+def ask_model(question, records, instructions=INSTRUCTIONS):
     payload = {
         "model": MODEL,
         "temperature": 0,
         "reasoning_effort": "low",
         "max_completion_tokens": 1500,
         "messages": [
-            {"role": "system", "content": INSTRUCTIONS},
+            {"role": "system", "content": instructions},
             {
                 "role": "user",
                 "content": "Question: " + question + "\n\nRecords:\n" + json.dumps(records),
@@ -89,9 +111,35 @@ def ask_model(question, records):
     return tidy(result["choices"][0]["message"]["content"] or "")
 
 
+def answer_evidence(question):
+    # evidence mode: the model sees every detector record, since there are only a few
+    try:
+        known = load_evidence()
+        raw = ask_model(question, list(known.values()), EVIDENCE_INSTRUCTIONS)
+    except Exception as error:
+        print("evidence answer failed:", error)
+        return reply(502, {"error": "The model is unavailable."})
+
+    if "NO_EVIDENCE" in raw:
+        return reply(200, {"answer": "", "ids": [], "gap": True})
+
+    answer = keep_cited(raw, r"\[[a-z0-9-]+\]")
+    cited = set(re.findall(r"\[([a-z0-9-]+)\]", answer))
+    if not cited or not cited <= set(known):
+        print("dropped evidence answer:", raw)
+        return reply(200, {"answer": "", "ids": [], "gap": True})
+
+    return reply(200, {"answer": answer, "ids": sorted(cited), "gap": False})
+
+
 def lambda_handler(event, context):
     try:
         body = read_body(event)
+        if body.get("mode") == "evidence":
+            question = str(body.get("question", "")).strip()[:300]
+            if not question:
+                return reply(400, {"error": "Send a question."})
+            return answer_evidence(question)
         question = str(body.get("question", "")).strip()[:300]
         ids = [str(item) for item in body.get("ids", [])][:3]
     except (ValueError, AttributeError, TypeError):
