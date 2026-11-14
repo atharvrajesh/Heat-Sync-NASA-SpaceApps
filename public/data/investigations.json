@@ -1,0 +1,11 @@
+{
+    "id": "PSI-102",
+    "name": "SAME",
+    "safety_area": "detection",
+    "objective": "",
+    "fuel": "",
+    "conditions": "",
+    "measurements": "",
+    "hardware": "",
+    "source_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-102"
+}
