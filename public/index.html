@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,6 +16,7 @@
       color: #17212b;
     }
 
+    /* card styles */
     article {
       margin-top: 20px;
       padding: 20px;
@@ -27,27 +29,46 @@
       margin-top: 0;
     }
 
-    select {
+    /* dropdown and button styles */
+    select,
+    button {
       margin-left: 8px;
-      padding: 6px;
+      padding: 6px 12px;
       font: inherit;
+      border: 1px solid #d2d9e0;
+      border-radius: 6px;
+      background: white;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
     }
   </style>
 </head>
+
 <body>
   <main>
     <p>Team Heat Sync</p>
     <h1>Alarm Gap</h1>
     <p>How did the tested ISS smoke detector respond to smoke from different materials?</p>
 
+    <!-- dropdown and download button -->
     <label for="material">Material</label>
     <select id="material" disabled>
       <option value="Teflon">Teflon</option>
       <option value="Kapton">Kapton</option>
     </select>
+    <button id="download-csv" type="button" disabled>Download CSV</button>
 
     <p id="status" role="status">Loading evidence...</p>
 
+    <!-- result cards -->
     <article id="detector-card" hidden>
       <h2 id="detector-name"></h2>
       <p id="detector-result"></p>
@@ -64,11 +85,15 @@
   </main>
 
   <script>
+    // get elements from page
     const materialSelect = document.querySelector("#material");
     const status = document.querySelector("#status");
     const detectorCard = document.querySelector("#detector-card");
     const testCard = document.querySelector("#test-card");
+    const downloadButton = document.querySelector("#download-csv");
+    let visibleRecords = [];
 
+    // show data on page
     function showEvidence(records) {
       const material = materialSelect.value;
 
@@ -81,6 +106,9 @@
         record.material === material &&
         record.evidence_type === "test_conditions"
       );
+
+      visibleRecords = [detector, test].filter(Boolean);
+      downloadButton.disabled = visibleRecords.length === 0;
 
       detectorCard.hidden = !detector;
       testCard.hidden = !test;
@@ -103,6 +131,48 @@
       }
     }
 
+    // helper to escape commas and quotes
+    function csvCell(value) {
+      const text = String(value ?? "");
+      return '"' + text.replaceAll('"', '""') + '"';
+    }
+
+    // make csv and download
+    function downloadCsv(records, material) {
+      const columns = [
+        ["Material", "material"],
+        ["Evidence type", "evidence_type"],
+        ["Finding", "reported_result"],
+        ["Test conditions", "conditions"],
+        ["Limitation", "limitation"],
+        ["Source URL", "source_url"]
+      ];
+
+      const header = columns.map(column => csvCell(column[0])).join(",");
+      const rows = records.map(record =>
+        columns.map(column => csvCell(record[column[1]])).join(",")
+      );
+
+      const csv = [header, ...rows].join("\r\n") + "\r\n";
+      const file = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "alarm-gap-" + material.toLowerCase() + ".csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    // function for button
+    downloadButton.addEventListener("click", () => {
+      downloadCsv(visibleRecords, materialSelect.value);
+    });
+
+    // load json data
     async function loadEvidence() {
       try {
         const response = await fetch("./data/evidence.json");
@@ -126,7 +196,9 @@
       }
     }
 
+    // start loading
     loadEvidence();
   </script>
 </body>
+
 </html>
