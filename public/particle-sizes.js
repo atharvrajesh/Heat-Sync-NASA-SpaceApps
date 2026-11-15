@@ -43,7 +43,7 @@ function showParticleSizes(data) {
     rows.push([material, "Aged", data.ageSeconds, aged, ...source]);
   }
 
-  button.addEventListener("click", () => downloadCsv(rows, "alarm-gap-particle-sizes.csv"));
+  button.addEventListener("click", () => downloadCsv(rows, "silent-alarm-particle-sizes.csv"));
   button.disabled = false;
 }
 

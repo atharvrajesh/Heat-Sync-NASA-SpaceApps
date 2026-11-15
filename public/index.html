@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alarm Gap</title>
+  <title>Silent Alarm</title>
   <style>
     body {
       max-width: 700px;
@@ -94,13 +94,13 @@
 <body>
   <main>
     <p>Team Heat Sync</p>
-    <h1>Alarm Gap</h1>
+    <h1>Silent Alarm</h1>
     <p><strong>A smoke alarm only helps if it goes off.</strong></p>
     <p>Artemis II commander Reid Wiseman reported a <a href="https://www.youtube.com/watch?v=_43Ei9eQVww&t=2783s">smoke alarm on the return trip</a>,
       about 80,000 miles from Earth. In NASA's SAME tests on the ISS, the tested station smoke detector would have
       stayed below its alarm threshold in about two-thirds of Teflon smoke tests
       and over half of Kapton smoke tests, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">under the conditions studied</a>.</p>
-    <p>Alarm Gap is for spacecraft fire-safety researchers. It ranks NASA's
+    <p>Silent Alarm is for spacecraft fire-safety researchers. It ranks NASA's
       microgravity combustion investigations for your question, summarizes the top
       matches with AI, shows the detector evidence with its limits, and proposes
       the next test to run.</p>
@@ -264,7 +264,7 @@
       const rows = records.map(record =>
         columns.map(column => record[column[1]])
       );
-      downloadCsv([header, ...rows], "alarm-gap-" + material.toLowerCase() + ".csv");
+      downloadCsv([header, ...rows], "silent-alarm-" + material.toLowerCase() + ".csv");
     }
 
     downloadButton.addEventListener("click", () => {
