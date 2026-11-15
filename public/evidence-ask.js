@@ -57,7 +57,7 @@ async function askEvidence() {
             });
             askAnswer.textContent = "AI summary of the detector records: " + text;
             askAnswer.hidden = false;
-            askStatus.textContent = "Sources are numbered in the order cited.";
+            askStatus.textContent = "Numbers in the answer match the sources listed below.";
             showSources(result.ids);
         }
     } catch (error) {
