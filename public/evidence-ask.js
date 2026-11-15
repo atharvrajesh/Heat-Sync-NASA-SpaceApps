@@ -78,4 +78,8 @@ async function loadAskEvidence() {
 }
 
 askButton.addEventListener("click", askEvidence);
+askInput.addEventListener("keydown", event => {
+    // enter asks the question like the button
+    if (event.key === "Enter" && !askButton.disabled) askEvidence();
+});
 loadAskEvidence();

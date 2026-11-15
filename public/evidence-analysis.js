@@ -1,22 +1,16 @@
-const materialSelect = document.querySelector("#material");
-const questionSelect = document.querySelector("#analysis-question");
-const environmentSelect = document.querySelector("#analysis-environment");
-const analyzeButton = document.querySelector("#analyze");
-const status = document.querySelector("#analysis-status");
-const results = document.querySelector("#analysis-results");
-const followUp = document.querySelector("#follow-up-test");
-const moonContext = document.querySelector("#moon-context");
-
+// shared ranker, plus the explore tool when its controls are on the page
 let records = [];
 let modelPromise;
 let analysisRun = 0;
+let controls;
 
 export function setAnalysisEvidence(evidence) {
   records = evidence;
-  analyzeButton.disabled = records.length === 0;
+  if (controls) controls.analyzeButton.disabled = records.length === 0;
 }
 
 function clearAnalysis() {
+  const { results, followUp, moonContext, status, analyzeButton } = controls;
   analysisRun += 1;
   results.replaceChildren();
   followUp.hidden = true;
@@ -82,11 +76,12 @@ function showRecord(record, isDirectEvidence) {
   source.href = record.source_url;
   source.textContent = record.source_reference || "Section 3.2 and Figure 9";
   item.append(title, finding, limitation, source);
-  results.append(item);
+  controls.results.append(item);
 }
 
 async function analyzeEvidence() {
   clearAnalysis();
+  const { materialSelect, questionSelect, environmentSelect, analyzeButton, status, moonContext, followUp } = controls;
   const currentRun = analysisRun;
   const material = materialSelect.value;
   const questionType = questionSelect.value;
@@ -146,7 +141,41 @@ async function analyzeEvidence() {
   analyzeButton.disabled = false;
 }
 
-for (const select of [materialSelect, questionSelect, environmentSelect]) {
-  select.addEventListener("change", clearAnalysis);
+async function loadAnalysisEvidence() {
+  try {
+    const response = await fetch("./data/evidence.json");
+    if (!response.ok) throw new Error("Could not load evidence.json.");
+    const evidence = await response.json();
+    if (!Array.isArray(evidence)) throw new Error("Expected a list of evidence records.");
+    setAnalysisEvidence(evidence);
+  } catch (error) {
+    controls.status.textContent = "Could not load the evidence. Check public/data/evidence.json.";
+    console.error(error);
+  }
 }
-analyzeButton.addEventListener("click", analyzeEvidence);
+
+// only wire up the explore tool on pages that have it
+function initAnalysis() {
+  const analyzeButton = document.querySelector("#analyze");
+  if (!analyzeButton) return;
+
+  controls = {
+    analyzeButton,
+    materialSelect: document.querySelector("#analysis-material") || document.querySelector("#material"),
+    questionSelect: document.querySelector("#analysis-question"),
+    environmentSelect: document.querySelector("#analysis-environment"),
+    status: document.querySelector("#analysis-status"),
+    results: document.querySelector("#analysis-results"),
+    followUp: document.querySelector("#follow-up-test"),
+    moonContext: document.querySelector("#moon-context")
+  };
+
+  for (const select of [controls.materialSelect, controls.questionSelect, controls.environmentSelect]) {
+    select.addEventListener("change", clearAnalysis);
+  }
+  analyzeButton.addEventListener("click", analyzeEvidence);
+  analyzeButton.disabled = records.length === 0;
+  if (records.length === 0) loadAnalysisEvidence();
+}
+
+initAnalysis();

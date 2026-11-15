@@ -1,4 +1,4 @@
-import { rankEvidence } from "./evidence-analysis.js";
+import { rankEvidence } from "./evidence-analysis.js?v=3";
 
 const questionInput = document.querySelector("#inv-question");
 const rankButton = document.querySelector("#inv-rank");
@@ -81,19 +81,43 @@ function showInvestigations(records) {
 
     for (const record of records) {
         const item = document.createElement("li");
+        const body = document.createElement("div");
+        const title = document.createElement("h3");
+        const meta = document.createElement("p");
         const link = document.createElement("a");
+        const area = document.createElement("span");
         const objective = document.createElement("p");
-        const details = document.createElement("p");
+        const details = document.createElement("dl");
 
+        item.className = "inv-item";
+        title.textContent = record.name;
+        meta.className = "inv-meta";
         link.href = record.source_url;
-        link.textContent = record.name + " (" + record.id + ") · " + record.safety_area;
+        link.textContent = "NASA PSI record " + record.id;
+        area.textContent = "Safety area: " + record.safety_area;
+        meta.append(link, area);
+        objective.className = "inv-objective";
         objective.textContent = record.objective;
+        details.className = "inv-details";
 
         // skip fields we left blank in the json
-        details.textContent = [record.fuel, record.conditions, record.measurements, record.hardware]
-            .filter(Boolean).join(" | ");
+        const fields = [
+            ["Fuel", record.fuel],
+            ["Test conditions", record.conditions],
+            ["Measurements", record.measurements],
+            ["Hardware", record.hardware]
+        ].filter(field => field[1]);
+        for (const [label, value] of fields) {
+            const term = document.createElement("dt");
+            const description = document.createElement("dd");
+            term.textContent = label;
+            description.textContent = value;
+            details.append(term, description);
+        }
 
-        item.append(link, objective, details);
+        body.append(title, meta, objective);
+        if (fields.length) body.append(details);
+        item.append(body);
         results.append(item);
     }
 }
@@ -144,4 +168,8 @@ async function loadInvestigations() {
 
 rankButton.disabled = true;
 rankButton.addEventListener("click", rankInvestigations);
+questionInput.addEventListener("keydown", event => {
+    // enter runs the search like the button
+    if (event.key === "Enter" && !rankButton.disabled) rankInvestigations();
+});
 loadInvestigations();

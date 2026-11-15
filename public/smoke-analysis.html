@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smoke Analysis | Silent Alarm</title>
+  <meta name="description" content="How smoke particles change as they age, plus tools to explore and question the detector evidence.">
+  <link rel="icon" type="image/png" href="./heat-sync-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="./styles.css?v=3">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./">
+        <img class="brand-logo" src="./heat-sync-logo.png" width="88" height="88"
+          alt="Heat Sync logo: an orange flame above two dark stones, with the words Heat Sync">
+        <span class="brand-text">
+          <span class="brand-name">Silent Alarm</span>
+          <span class="brand-team">Team Heat Sync</span>
+          <span class="brand-credit">Logo artwork: AI-generated</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="./">Home</a></li>
+          <li><a href="./investigations.html">Investigations</a></li>
+          <li><a href="./detector-evidence.html">Detector Evidence</a></li>
+          <li><a href="./smoke-analysis.html" aria-current="page">Smoke Analysis</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div class="wrap"><div class="vista vista-strip"><svg class="scene" viewBox="0 260 1600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect width="1600" height="900" fill="#F2E1CE"/><rect width="1600" height="900" fill="#C65429" opacity="0.35"/><circle cx="1250" cy="470" r="80" fill="#C65429" opacity="1"/><path d="M0 900 L0 480 L40 465 L80 487 L120 502 L160 533 L200 539 L240 504 L280 476 L320 469 L360 445 L400 460 L440 473 L480 468 L520 442 L560 416 L600 411 L640 426 L680 455 L720 487 L760 485 L800 485 L840 491 L880 475 L920 487 L960 501 L1000 517 L1040 504 L1080 479 L1120 449 L1160 443 L1200 433 L1240 450 L1280 457 L1320 456 L1360 431 L1400 429 L1440 428 L1480 450 L1520 474 L1560 506 L1600 507 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 480 L40 465 L80 487 L120 502 L160 533 L200 539 L240 504 L280 476 L320 469 L360 445 L400 460 L440 473 L480 468 L520 442 L560 416 L600 411 L640 426 L680 455 L720 487 L760 485 L800 485 L840 491 L880 475 L920 487 L960 501 L1000 517 L1040 504 L1080 479 L1120 449 L1160 443 L1200 433 L1240 450 L1280 457 L1320 456 L1360 431 L1400 429 L1440 428 L1480 450 L1520 474 L1560 506 L1600 507 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 480 L40 465 L80 487 L120 502 L160 533 L200 539 L240 504 L280 476 L320 469 L360 445 L400 460 L440 473 L480 468 L520 442 L560 416 L600 411 L640 426 L680 455 L720 487 L760 485 L800 485 L840 491 L880 475 L920 487 L960 501 L1000 517 L1040 504 L1080 479 L1120 449 L1160 443 L1200 433 L1240 450 L1280 457 L1320 456 L1360 431 L1400 429 L1440 428 L1480 450 L1520 474 L1560 506 L1600 507 L1600 900 Z" fill="#462A1F" opacity="0.3"/><path d="M0 900 L0 561 L40 560 L80 553 L120 561 L160 577 L200 605 L240 632 L280 620 L320 585 L360 571 L400 553 L440 548 L480 561 L520 565 L560 527 L600 518 L640 493 L680 492 L720 536 L760 558 L800 586 L840 582 L880 576 L920 581 L960 577 L1000 594 L1040 610 L1080 616 L1120 595 L1160 570 L1200 539 L1240 528 L1280 536 L1320 538 L1360 542 L1400 529 L1440 499 L1480 503 L1520 517 L1560 561 L1600 580 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 561 L40 560 L80 553 L120 561 L160 577 L200 605 L240 632 L280 620 L320 585 L360 571 L400 553 L440 548 L480 561 L520 565 L560 527 L600 518 L640 493 L680 492 L720 536 L760 558 L800 586 L840 582 L880 576 L920 581 L960 577 L1000 594 L1040 610 L1080 616 L1120 595 L1160 570 L1200 539 L1240 528 L1280 536 L1320 538 L1360 542 L1400 529 L1440 499 L1480 503 L1520 517 L1560 561 L1600 580 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 561 L40 560 L80 553 L120 561 L160 577 L200 605 L240 632 L280 620 L320 585 L360 571 L400 553 L440 548 L480 561 L520 565 L560 527 L600 518 L640 493 L680 492 L720 536 L760 558 L800 586 L840 582 L880 576 L920 581 L960 577 L1000 594 L1040 610 L1080 616 L1120 595 L1160 570 L1200 539 L1240 528 L1280 536 L1320 538 L1360 542 L1400 529 L1440 499 L1480 503 L1520 517 L1560 561 L1600 580 L1600 900 Z" fill="#462A1F" opacity="0.45"/><path d="M0 900 L0 655 L40 660 L80 689 L120 703 L160 711 L200 719 L240 691 L280 659 L320 636 L360 646 L400 642 L440 658 L480 636 L520 616 L560 605 L600 605 L640 633 L680 664 L720 684 L760 681 L800 689 L840 670 L880 675 L920 689 L960 703 L1000 703 L1040 691 L1080 668 L1120 634 L1160 615 L1200 621 L1240 640 L1280 634 L1320 629 L1360 623 L1400 615 L1440 635 L1480 655 L1520 690 L1560 703 L1600 697 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 655 L40 660 L80 689 L120 703 L160 711 L200 719 L240 691 L280 659 L320 636 L360 646 L400 642 L440 658 L480 636 L520 616 L560 605 L600 605 L640 633 L680 664 L720 684 L760 681 L800 689 L840 670 L880 675 L920 689 L960 703 L1000 703 L1040 691 L1080 668 L1120 634 L1160 615 L1200 621 L1240 640 L1280 634 L1320 629 L1360 623 L1400 615 L1440 635 L1480 655 L1520 690 L1560 703 L1600 697 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 655 L40 660 L80 689 L120 703 L160 711 L200 719 L240 691 L280 659 L320 636 L360 646 L400 642 L440 658 L480 636 L520 616 L560 605 L600 605 L640 633 L680 664 L720 684 L760 681 L800 689 L840 670 L880 675 L920 689 L960 703 L1000 703 L1040 691 L1080 668 L1120 634 L1160 615 L1200 621 L1240 640 L1280 634 L1320 629 L1360 623 L1400 615 L1440 635 L1480 655 L1520 690 L1560 703 L1600 697 L1600 900 Z" fill="#462A1F" opacity="0.7"/><path d="M0 900 L0 815 L40 831 L80 823 L120 811 L160 783 L200 768 L240 754 L280 759 L320 767 L360 765 L400 753 L440 745 L480 744 L520 744 L560 770 L600 802 L640 819 L680 808 L720 794 L760 786 L800 795 L840 810 L880 824 L920 809 L960 783 L1000 765 L1040 740 L1080 746 L1120 757 L1160 762 L1200 760 L1240 768 L1280 758 L1320 754 L1360 775 L1400 805 L1440 818 L1480 827 L1520 817 L1560 805 L1600 788 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 815 L40 831 L80 823 L120 811 L160 783 L200 768 L240 754 L280 759 L320 767 L360 765 L400 753 L440 745 L480 744 L520 744 L560 770 L600 802 L640 819 L680 808 L720 794 L760 786 L800 795 L840 810 L880 824 L920 809 L960 783 L1000 765 L1040 740 L1080 746 L1120 757 L1160 762 L1200 760 L1240 768 L1280 758 L1320 754 L1360 775 L1400 805 L1440 818 L1480 827 L1520 817 L1560 805 L1600 788 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 815 L40 831 L80 823 L120 811 L160 783 L200 768 L240 754 L280 759 L320 767 L360 765 L400 753 L440 745 L480 744 L520 744 L560 770 L600 802 L640 819 L680 808 L720 794 L760 786 L800 795 L840 810 L880 824 L920 809 L960 783 L1000 765 L1040 740 L1080 746 L1120 757 L1160 762 L1200 760 L1240 768 L1280 758 L1320 754 L1360 775 L1400 805 L1440 818 L1480 827 L1520 817 L1560 805 L1600 788 L1600 900 Z" fill="#462A1F" opacity="0.95"/></svg></div></div>
+    <div class="wrap">
+      <section class="page-head" aria-labelledby="particle-title">
+        <p class="kicker">Smoke analysis</p>
+        <div class="section-head">
+          <h1 id="particle-title">How smoke particles change as they age</h1>
+          <button id="download-particle-csv" class="button-secondary" type="button" disabled>Download particle size CSV</button>
+        </div>
+        <p class="lede">NASA's SAME flight tests reported the arithmetic mean smoke particle diameter
+          at baseline and after aging. All bars use the same 0 to 450 nm scale.</p>
+
+        <div class="panel chart-panel">
+          <ul class="chart-legend" aria-hidden="true">
+            <li><span class="swatch"></span>Baseline (no aging)</li>
+            <li><span class="swatch aged"></span>Aged 720 s</li>
+          </ul>
+          <p id="particle-status" class="status" role="status"></p>
+          <ul id="particle-chart" class="particle-chart" role="list"
+            aria-label="Arithmetic mean particle diameter by material"></ul>
+          <div class="chart-scale" aria-hidden="true">
+            <span></span>
+            <span class="chart-scale-ticks">
+              <span style="left: 0%">0</span>
+              <span style="left: 33.333%">150</span>
+              <span style="left: 66.667%">300</span>
+              <span style="left: 100%">450</span>
+            </span>
+            <span>nm</span>
+          </div>
+        </div>
+
+        <p class="prose chart-note">The reported mean diameter was larger after aging for all four materials.
+          Matching smoke age would make a follow-up detector comparison easier to interpret.
+          The detector study describes the alarm thresholds separately.</p>
+        <p><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25">See SAME Final Science Report,
+            Table 1</a></p>
+      </section>
+
+      <div class="tools">
+        <section class="panel tool-panel rule-top" aria-labelledby="analysis-title">
+          <p class="tool-kicker">Tool 1: guided ranking</p>
+          <h2 id="analysis-title">Explore the evidence</h2>
+          <p class="muted">Pick a material, a question, and an environment. A small model in your browser
+            ranks the matching detector records and puts direct evidence first.</p>
+          <div class="field-row">
+            <div>
+              <label for="analysis-material">Material</label>
+              <select id="analysis-material">
+                <option value="Teflon">Teflon</option>
+                <option value="Kapton">Kapton</option>
+              </select>
+            </div>
+            <div>
+              <label for="analysis-question">Question</label>
+              <select id="analysis-question">
+                <option value="detector_response">How did the detector respond?</option>
+                <option value="compare_detectors">How did the ISS and Shuttle detectors compare?</option>
+                <option value="test_conditions">What conditions did NASA report?</option>
+              </select>
+            </div>
+            <div>
+              <label for="analysis-environment">Environment</label>
+              <select id="analysis-environment">
+                <option value="microgravity">ISS microgravity</option>
+                <option value="moon">Moon gravity</option>
+              </select>
+            </div>
+            <button id="analyze" type="button" disabled>Rank evidence</button>
+          </div>
+          <p id="analysis-status" class="status" role="status"></p>
+          <div id="moon-context" class="context-block" hidden>
+            <p><strong>Related NASA research</strong> The Lunar Combustion Investigation measured how flames spread
+              on cotton-fiberglass fabric and acrylic in simulated lunar gravity. Its measurements describe
+              material flammability. <a href="https://ntrs.nasa.gov/citations/20250010653">See the LUCI flight results</a>.</p>
+            <p><strong>Proposed lunar follow-up</strong> Compare the same smoke detector and selected material
+              in microgravity and simulated lunar gravity. Match airflow, smoke aging time, oxygen concentration,
+              and pressure. Record the detector signal and whether and when it alarms.</p>
+          </div>
+          <ol id="analysis-results" class="result-list" aria-label="Ranked evidence"></ol>
+          <p id="follow-up-test" hidden>
+            Proposed test: Compare the ISS and Shuttle detector types with the same
+            Teflon smoke exposure, airflow, and smoke aging time. That would help
+            isolate how the detector type affects the response.
+          </p>
+        </section>
+
+        <section class="panel tool-panel ask" aria-labelledby="ask-title">
+          <p class="tool-kicker">Tool 2: AI question</p>
+          <h2 id="ask-title">Ask your own question</h2>
+          <p>Ask in your own words. An AI model answers only from the detector evidence records and numbers
+            each source. If the records do not cover your question, it says so instead of guessing.</p>
+          <div class="field-row">
+            <div class="grow">
+              <label for="ask-question">Question</label>
+              <input id="ask-question" type="text" placeholder="e.g. Did the ISS detector catch Kapton smoke?">
+            </div>
+            <button id="ask-button" type="button">Ask the evidence</button>
+          </div>
+          <p id="ask-status" class="status" role="status"></p>
+          <p id="ask-answer" hidden></p>
+          <ol id="ask-sources" class="result-list"></ol>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <p class="foot-name">Silent Alarm</p>
+          <p>Smoke detector evidence from NASA research, built by Team Heat Sync for the NASA Space Apps
+            Challenge 2026.</p>
+          <p class="small">AI summaries cite the records they use. The Heat Sync logo artwork is AI-generated.</p>
+        </div>
+        <div>
+          <p class="foot-head">Pages</p>
+          <ul>
+            <li><a href="./">Home</a></li>
+            <li><a href="./investigations.html">Investigations</a></li>
+            <li><a href="./detector-evidence.html">Detector Evidence</a></li>
+            <li><a href="./smoke-analysis.html">Smoke Analysis</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-head">Sources</p>
+          <ul>
+            <li><a href="https://psi.nasa.gov/physci/repo/data/investigations/PSI-102">NASA PSI: SAME</a></li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">SAME detector study</a></li>
+            <li><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707">SAME Final Science Report</a></li>
+            <li><a href="https://ntrs.nasa.gov/citations/20250010653">LUCI flight results</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-head">Challenge</p>
+          <ul>
+            <li><a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/">Flame in Freefall</a></li>
+            <li>Team Heat Sync</li>
+          </ul>
+        </div>
+      </div>
+      <p class="foot-word" aria-hidden="true">Silent Alarm</p>
+      <div class="foot-bottom">
+        <span>Team Heat Sync, NASA Space Apps Challenge 2026</span>
+        <span>Data: NASA PSI, PMC, NIST, NTRS</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./particle-sizes.js?v=3"></script>
+  <script type="module" src="./evidence-analysis.js?v=3"></script>
+  <script type="module" src="./evidence-ask.js?v=3"></script>
+</body>
+
+</html>

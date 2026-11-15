@@ -1,4 +1,4 @@
-import { downloadCsv } from "./csv.js";
+import { downloadCsv } from "./csv.js?v=3";
 
 const chart = document.querySelector("#particle-chart");
 const status = document.querySelector("#particle-status");

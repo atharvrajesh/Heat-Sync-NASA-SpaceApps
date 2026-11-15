@@ -5,301 +5,262 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Silent Alarm</title>
-  <style>
-    body {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 0 20px;
-      font-family: Arial, sans-serif;
-      line-height: 1.5;
-      background: #f4f6f8;
-      color: #17212b;
-    }
-
-    /* card styles */
-    article,
-    section {
-      margin-top: 20px;
-      padding: 20px;
-      background: white;
-      border: 1px solid #d2d9e0;
-      border-radius: 8px;
-    }
-
-    h2 {
-      margin-top: 0;
-    }
-
-    /* dropdown and button styles */
-    select,
-    button {
-      margin-left: 8px;
-      padding: 6px 12px;
-      font: inherit;
-      border: 1px solid #d2d9e0;
-      border-radius: 6px;
-      background: white;
-      color: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    .particle-chart {
-      list-style: none;
-      padding: 0;
-    }
-
-    #download-particle-csv {
-      margin-left: 0;
-    }
-
-    .particle-chart li+li {
-      margin-top: 16px;
-    }
-
-    .particle-bar {
-      display: grid;
-      grid-template-columns: 5.5rem minmax(0, 1fr) 4rem;
-      gap: 8px;
-      align-items: center;
-      margin: 4px 0;
-    }
-
-    .particle-track {
-      height: 10px;
-      background: #e8edf2;
-      border-radius: 4px;
-    }
-
-    .particle-track span {
-      display: block;
-      height: 100%;
-      border-radius: inherit;
-      background: #237074;
-    }
-
-    .particle-bar.aged .particle-track span {
-      background: #9a4427;
-    }
-  </style>
+  <meta name="description" content="Silent Alarm by Team Heat Sync: NASA smoke detector evidence for spacecraft fire-safety researchers.">
+  <link rel="icon" type="image/png" href="./heat-sync-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="./styles.css?v=3">
 </head>
 
 <body>
-  <main>
-    <p>Team Heat Sync</p>
-    <h1>Silent Alarm</h1>
-    <p><strong>A smoke alarm only helps if it goes off.</strong></p>
-    <p>Artemis II commander Reid Wiseman reported a <a href="https://www.youtube.com/watch?v=_43Ei9eQVww&t=2783s">smoke alarm on the return trip</a>,
-      about 80,000 miles from Earth. In NASA's SAME tests on the ISS, the tested station smoke detector would have
-      stayed below its alarm threshold in about two-thirds of Teflon smoke tests
-      and over half of Kapton smoke tests, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">under the conditions studied</a>.</p>
-    <p>Silent Alarm is for spacecraft fire-safety researchers. It ranks NASA's
-      microgravity combustion investigations for your question, summarizes the top
-      matches with AI, shows the detector evidence with its limits, and proposes
-      the next test to run.</p>
-    <p>For lunar habitats, a key question is how smoke detectors respond at the Moon's gravity.
-      <a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/">Flame in Freefall challenge background</a></p>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    <section aria-labelledby="inv-title">
-      <h2 id="inv-title">Which NASA investigations matter for my question?</h2>
-      <label for="inv-question">Question</label>
-      <input id="inv-question" size="45" placeholder="e.g. detecting smoke from overheated plastics">
-      <button id="inv-rank" type="button">Rank investigations</button>
-      <p id="inv-status" role="status"></p>
-      <p id="inv-answer-status" role="status"></p>
-      <p id="inv-answer" hidden></p>
-      <ol id="inv-results"></ol>
-    </section>
-    <h2>Detector evidence by material</h2>
-    <!-- dropdown and download button -->
-    <label for="material">Material</label>
-    <select id="material" disabled>
-      <option value="Teflon">Teflon</option>
-      <option value="Kapton">Kapton</option>
-    </select>
-    <button id="download-csv" type="button" disabled>Download CSV</button>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="./">
+        <img class="brand-logo" src="./heat-sync-logo.png" width="88" height="88"
+          alt="Heat Sync logo: an orange flame above two dark stones, with the words Heat Sync">
+        <span class="brand-text">
+          <span class="brand-name">Silent Alarm</span>
+          <span class="brand-team">Team Heat Sync</span>
+          <span class="brand-credit">Logo artwork: AI-generated</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="./" aria-current="page">Home</a></li>
+          <li><a href="./investigations.html">Investigations</a></li>
+          <li><a href="./detector-evidence.html">Detector Evidence</a></li>
+          <li><a href="./smoke-analysis.html">Smoke Analysis</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <p id="status" role="status">Loading evidence...</p>
-
-    <!-- result cards -->
-    <article id="detector-card" hidden>
-      <h2 id="detector-name"></h2>
-      <p id="detector-result"></p>
-      <p id="detector-limit"></p>
-      <a id="detector-source">See Figure 9 in the study</a>
-    </article>
-
-    <article id="test-card" hidden>
-      <h2>NASA SAME Test Conditions</h2>
-      <p id="test-conditions"></p>
-      <p id="test-limit"></p>
-      <a id="test-source">See the NASA experiment record</a>
-    </article>
-
-    <section aria-labelledby="analysis-title">
-      <h2 id="analysis-title">Explore the evidence</h2>
-      <p>
-        <label for="analysis-question">Question</label>
-        <select id="analysis-question">
-          <option value="detector_response">How did the detector respond?</option>
-          <option value="compare_detectors">How did the ISS and Shuttle detectors compare?</option>
-          <option value="test_conditions">What conditions did NASA report?</option>
-        </select>
-      </p>
-      <p>
-        <label for="analysis-environment">Environment</label>
-        <select id="analysis-environment">
-          <option value="microgravity">ISS microgravity</option>
-          <option value="moon">Moon gravity</option>
-        </select>
-      </p>
-      <button id="analyze" type="button" disabled>Rank evidence</button>
-      <p id="analysis-status" role="status"></p>
-      <div id="moon-context" hidden>
-        <p><strong>Related NASA research</strong> The Lunar Combustion Investigation measured how flames spread
-          on cotton-fiberglass fabric and acrylic in simulated lunar gravity. Its measurements describe
-          material flammability. <a href="https://ntrs.nasa.gov/citations/20250010653">See the LUCI flight results</a>.</p>
-        <p><strong>Proposed lunar follow-up</strong> Compare the same smoke detector and selected material
-          in microgravity and simulated lunar gravity. Match airflow, smoke aging time, oxygen concentration,
-          and pressure. Record the detector signal and whether and when it alarms.</p>
+  <main id="main" tabindex="-1">
+    <section class="hero" aria-labelledby="home-title">
+      <div class="wrap hero-copy">
+        <p class="kicker rise">Spacecraft fire-safety research</p>
+        <h1 id="home-title" class="rise">A smoke alarm only helps if it goes off.</h1>
+        <p class="lede rise">Artemis II commander Reid Wiseman reported a
+          <a href="https://www.youtube.com/watch?v=_43Ei9eQVww&amp;t=2783s">smoke alarm on the return trip</a>,
+          about 80,000 miles from Earth. Silent Alarm asks the quieter question: what if the smoke is there and
+          the alarm stays silent?</p>
+        <div class="actions rise">
+          <a class="button" href="./detector-evidence.html">Explore detector evidence</a>
+          <a class="text-link" href="./investigations.html">Or rank NASA investigations for your question</a>
+        </div>
       </div>
-      <ol id="analysis-results" aria-label="Ranked evidence"></ol>
-      <p id="follow-up-test" hidden>
-        Proposed test: Compare the ISS and Shuttle detector types with the same
-        Teflon smoke exposure, airflow, and smoke aging time. That would help
-        isolate how the detector type affects the response.
-      </p>
 
-      <h3>Ask your own question</h3>
-      <label for="ask-question">Question</label>
-      <input id="ask-question" size="45" placeholder="e.g. Did the ISS detector catch Kapton smoke?">
-      <button id="ask-button" type="button">Ask the evidence</button>
-      <p id="ask-status" role="status"></p>
-      <p id="ask-answer" hidden></p>
-      <ol id="ask-sources"></ol>
+      <div class="wrap-wide rise rise-late">
+        <figure class="vista hero-vista" aria-labelledby="hero-caption">
+          <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect width="1600" height="900" fill="#F2E4B1"/><circle cx="1180" cy="300" r="70" fill="#C65429" opacity="1"/><path d="M0 900 L0 510 L40 520 L80 534 L120 506 L160 484 L200 456 L240 449 L280 449 L320 451 L360 461 L400 454 L440 424 L480 420 L520 423 L560 447 L600 489 L640 501 L680 512 L720 493 L760 488 L800 483 L840 501 L880 522 L920 500 L960 489 L1000 445 L1040 424 L1080 425 L1120 429 L1160 455 L1200 456 L1240 443 L1280 448 L1320 449 L1360 456 L1400 477 L1440 510 L1480 519 L1520 509 L1560 495 L1600 482 L1600 900 Z" fill="#F2E4B1"/><path d="M0 900 L0 510 L40 520 L80 534 L120 506 L160 484 L200 456 L240 449 L280 449 L320 451 L360 461 L400 454 L440 424 L480 420 L520 423 L560 447 L600 489 L640 501 L680 512 L720 493 L760 488 L800 483 L840 501 L880 522 L920 500 L960 489 L1000 445 L1040 424 L1080 425 L1120 429 L1160 455 L1200 456 L1240 443 L1280 448 L1320 449 L1360 456 L1400 477 L1440 510 L1480 519 L1520 509 L1560 495 L1600 482 L1600 900 Z" fill="#462A1F" opacity="0.18"/><path d="M0 900 L0 559 L40 554 L80 565 L120 584 L160 617 L200 638 L240 613 L280 582 L320 558 L360 544 L400 537 L440 555 L480 546 L520 528 L560 517 L600 503 L640 510 L680 535 L720 569 L760 584 L800 597 L840 577 L880 573 L920 586 L960 595 L1000 611 L1040 608 L1080 593 L1120 551 L1160 533 L1200 530 L1240 522 L1280 527 L1320 544 L1360 534 L1400 505 L1440 514 L1480 530 L1520 564 L1560 589 L1600 619 L1600 900 Z" fill="#F2E4B1"/><path d="M0 900 L0 559 L40 554 L80 565 L120 584 L160 617 L200 638 L240 613 L280 582 L320 558 L360 544 L400 537 L440 555 L480 546 L520 528 L560 517 L600 503 L640 510 L680 535 L720 569 L760 584 L800 597 L840 577 L880 573 L920 586 L960 595 L1000 611 L1040 608 L1080 593 L1120 551 L1160 533 L1200 530 L1240 522 L1280 527 L1320 544 L1360 534 L1400 505 L1440 514 L1480 530 L1520 564 L1560 589 L1600 619 L1600 900 Z" fill="#462A1F" opacity="0.32"/><path d="M0 900 L0 629 L40 608 L80 624 L120 640 L160 651 L200 641 L240 622 L280 624 L320 656 L360 670 L400 708 L440 723 L480 697 L520 682 L560 674 L600 665 L640 685 L680 681 L720 668 L760 637 L800 626 L840 596 L880 612 L920 632 L960 641 L1000 665 L1040 652 L1080 653 L1120 654 L1160 662 L1200 692 L1240 708 L1280 708 L1320 696 L1360 667 L1400 651 L1440 658 L1480 661 L1520 659 L1560 640 L1600 617 L1600 900 Z" fill="#F2E4B1"/><path d="M0 900 L0 629 L40 608 L80 624 L120 640 L160 651 L200 641 L240 622 L280 624 L320 656 L360 670 L400 708 L440 723 L480 697 L520 682 L560 674 L600 665 L640 685 L680 681 L720 668 L760 637 L800 626 L840 596 L880 612 L920 632 L960 641 L1000 665 L1040 652 L1080 653 L1120 654 L1160 662 L1200 692 L1240 708 L1280 708 L1320 696 L1360 667 L1400 651 L1440 658 L1480 661 L1520 659 L1560 640 L1600 617 L1600 900 Z" fill="#462A1F" opacity="0.55"/><path d="M0 900 L0 824 L40 811 L80 789 L120 758 L160 750 L200 743 L240 760 L280 773 L320 757 L360 744 L400 745 L440 751 L480 761 L520 798 L560 820 L600 822 L640 805 L680 792 L720 798 L760 806 L800 809 L840 813 L880 792 L920 771 L960 743 L1000 739 L1040 752 L1080 753 L1120 774 L1160 775 L1200 757 L1240 759 L1280 771 L1320 790 L1360 823 L1400 825 L1440 823 L1480 804 L1520 796 L1560 791 L1600 785 L1600 900 Z" fill="#F2E4B1"/><path d="M0 900 L0 824 L40 811 L80 789 L120 758 L160 750 L200 743 L240 760 L280 773 L320 757 L360 744 L400 745 L440 751 L480 761 L520 798 L560 820 L600 822 L640 805 L680 792 L720 798 L760 806 L800 809 L840 813 L880 792 L920 771 L960 743 L1000 739 L1040 752 L1080 753 L1120 774 L1160 775 L1200 757 L1240 759 L1280 771 L1320 790 L1360 823 L1400 825 L1440 823 L1480 804 L1520 796 L1560 791 L1600 785 L1600 900 Z" fill="#462A1F" opacity="0.85"/></svg>
+          <p class="vista-tag">Example answers from Silent Alarm</p>
+          <div class="hero-chat">
+            <p class="bubble bubble-alert"><span class="bubble-dot" aria-hidden="true"></span>
+              <span>Artemis II, return trip: a smoke alarm sounded about 80,000 miles from Earth.</span></p>
+            <p class="bubble bubble-question" id="scene-question">Did the ISS detector catch Kapton smoke?</p>
+            <div class="bubble bubble-answer" id="scene-answer" aria-live="polite">
+              <p id="scene-answer-text">The ISS light-scattering detector would have stayed below its alarm threshold in over half of the reported Kapton smoke tests [1].</p>
+              <p class="bubble-source" id="scene-answer-source">[1] <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">SAME detector study, Figure 9</a>. Under the conditions studied.</p>
+            </div>
+          </div>
+          <div class="scene-chips" role="group" aria-label="Example questions">
+            <button type="button" class="scene-chip" data-scene="kapton" aria-pressed="true">Kapton</button>
+            <button type="button" class="scene-chip" data-scene="teflon" aria-pressed="false">Teflon</button>
+            <button type="button" class="scene-chip" data-scene="moon" aria-pressed="false">Moon</button>
+          </div>
+          <figcaption id="hero-caption" class="visually-hidden">Example questions and cited answers from the Silent Alarm tools.</figcaption>
+        </figure>
+      </div>
     </section>
 
-    <section aria-labelledby="particle-title">
-      <h2 id="particle-title">How smoke particles change as they age</h2>
-      <p>NASA's SAME flight tests reported the arithmetic mean smoke particle diameter
-        at baseline and after aging. All bars use the same 0 to 450 nm scale.</p>
-      <button id="download-particle-csv" type="button" disabled>Download particle size CSV</button>
-      <p id="particle-status" role="status"></p>
-      <ul id="particle-chart" class="particle-chart" role="list"
-        aria-label="Arithmetic mean particle diameter by material"></ul>
-      <p>The reported mean diameter was larger after aging for all four materials.
-        Matching smoke age would make a follow-up detector comparison easier to interpret.
-        The detector study describes the alarm thresholds separately.</p>
-      <p><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25">See SAME Final Science Report,
-          Table 1</a></p>
+    <section class="sources" aria-labelledby="sources-title">
+      <div class="wrap">
+        <p id="sources-title" class="sources-label">Built on public NASA research</p>
+        <ul class="sources-row">
+          <li><a href="https://psi.nasa.gov/physci/repo/data/investigations/PSI-102">NASA Physical Sciences Informatics</a></li>
+          <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">SAME detector study</a></li>
+          <li><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707#page=25">SAME Final Science Report</a></li>
+          <li><a href="https://ntrs.nasa.gov/citations/20250010653">LUCI flight results</a></li>
+          <li><a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/">Flame in Freefall</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section-pad" aria-labelledby="findings-title">
+      <div class="wrap">
+        <div class="statement">
+          <p class="kicker">On the ISS</p>
+          <h2 id="findings-title">Two findings from NASA's SAME tests</h2>
+          <p class="lede">The tested station smoke detector often stayed quiet for smoke from two common spacecraft materials.</p>
+        </div>
+        <div class="findings">
+          <article class="card finding rule-top" aria-labelledby="teflon-figure">
+            <p class="finding-figure" id="teflon-figure">About two-thirds</p>
+            <p class="finding-material">Teflon smoke tests</p>
+            <p class="finding-text">In about two-thirds of Teflon smoke tests, the tested station smoke detector
+              would have stayed below its alarm threshold.</p>
+            <div class="finding-meta">
+              <p><strong>Qualifier:</strong> under the conditions studied in NASA's SAME tests on the ISS.</p>
+              <p><strong>Source:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">SAME detector study, Figure 9</a></p>
+            </div>
+          </article>
+          <article class="card finding rule-top" aria-labelledby="kapton-figure">
+            <p class="finding-figure" id="kapton-figure">Over half</p>
+            <p class="finding-material">Kapton smoke tests</p>
+            <p class="finding-text">In over half of Kapton smoke tests, the tested station smoke detector
+              would have stayed below its alarm threshold.</p>
+            <div class="finding-meta">
+              <p><strong>Qualifier:</strong> under the conditions studied in NASA's SAME tests on the ISS.</p>
+              <p><strong>Source:</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">SAME detector study, Figure 9</a></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad how" aria-labelledby="how-title">
+      <div class="wrap how-grid">
+        <div>
+          <p class="kicker">How it works</p>
+          <h2 id="how-title">What Silent Alarm does</h2>
+          <p class="how-text">Silent Alarm is for spacecraft fire-safety researchers. It ranks NASA's
+            microgravity combustion investigations for your question, summarizes the top
+            matches with AI, shows the detector evidence with its limits, and proposes
+            the next test to run.</p>
+          <div class="steps" role="tablist" aria-label="Silent Alarm tools" aria-orientation="vertical">
+            <button type="button" class="step" role="tab" id="step-1" aria-controls="panel-1" aria-selected="true">
+              <span class="step-num">01</span><span class="step-title">Rank NASA investigations</span></button>
+            <button type="button" class="step" role="tab" id="step-2" aria-controls="panel-2" aria-selected="false" tabindex="-1">
+              <span class="step-num">02</span><span class="step-title">Read the detector evidence</span></button>
+            <button type="button" class="step" role="tab" id="step-3" aria-controls="panel-3" aria-selected="false" tabindex="-1">
+              <span class="step-num">03</span><span class="step-title">See how smoke ages</span></button>
+            <button type="button" class="step" role="tab" id="step-4" aria-controls="panel-4" aria-selected="false" tabindex="-1">
+              <span class="step-num">04</span><span class="step-title">Propose the next test</span></button>
+          </div>
+        </div>
+
+        <div class="vista how-vista">
+          <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect width="1600" height="900" fill="#F2E1CE"/><rect width="1600" height="900" fill="#C65429" opacity="0.35"/><circle cx="1250" cy="470" r="80" fill="#C65429" opacity="1"/><path d="M0 900 L0 486 L40 518 L80 523 L120 530 L160 496 L200 464 L240 449 L280 435 L320 456 L360 450 L400 446 L440 432 L480 431 L520 422 L560 445 L600 463 L640 502 L680 501 L720 496 L760 495 L800 498 L840 491 L880 516 L920 518 L960 506 L1000 470 L1040 430 L1080 431 L1120 438 L1160 435 L1200 456 L1240 452 L1280 430 L1320 439 L1360 447 L1400 476 L1440 493 L1480 515 L1520 512 L1560 504 L1600 482 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 486 L40 518 L80 523 L120 530 L160 496 L200 464 L240 449 L280 435 L320 456 L360 450 L400 446 L440 432 L480 431 L520 422 L560 445 L600 463 L640 502 L680 501 L720 496 L760 495 L800 498 L840 491 L880 516 L920 518 L960 506 L1000 470 L1040 430 L1080 431 L1120 438 L1160 435 L1200 456 L1240 452 L1280 430 L1320 439 L1360 447 L1400 476 L1440 493 L1480 515 L1520 512 L1560 504 L1600 482 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 486 L40 518 L80 523 L120 530 L160 496 L200 464 L240 449 L280 435 L320 456 L360 450 L400 446 L440 432 L480 431 L520 422 L560 445 L600 463 L640 502 L680 501 L720 496 L760 495 L800 498 L840 491 L880 516 L920 518 L960 506 L1000 470 L1040 430 L1080 431 L1120 438 L1160 435 L1200 456 L1240 452 L1280 430 L1320 439 L1360 447 L1400 476 L1440 493 L1480 515 L1520 512 L1560 504 L1600 482 L1600 900 Z" fill="#462A1F" opacity="0.3"/><path d="M0 900 L0 563 L40 577 L80 598 L120 624 L160 639 L200 627 L240 593 L280 557 L320 532 L360 536 L400 542 L440 554 L480 544 L520 512 L560 501 L600 501 L640 525 L680 571 L720 584 L760 595 L800 581 L840 581 L880 591 L920 592 L960 616 L1000 624 L1040 597 L1080 569 L1120 538 L1160 521 L1200 512 L1240 539 L1280 534 L1320 537 L1360 520 L1400 517 L1440 524 L1480 573 L1520 594 L1560 623 L1600 616 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 563 L40 577 L80 598 L120 624 L160 639 L200 627 L240 593 L280 557 L320 532 L360 536 L400 542 L440 554 L480 544 L520 512 L560 501 L600 501 L640 525 L680 571 L720 584 L760 595 L800 581 L840 581 L880 591 L920 592 L960 616 L1000 624 L1040 597 L1080 569 L1120 538 L1160 521 L1200 512 L1240 539 L1280 534 L1320 537 L1360 520 L1400 517 L1440 524 L1480 573 L1520 594 L1560 623 L1600 616 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 563 L40 577 L80 598 L120 624 L160 639 L200 627 L240 593 L280 557 L320 532 L360 536 L400 542 L440 554 L480 544 L520 512 L560 501 L600 501 L640 525 L680 571 L720 584 L760 595 L800 581 L840 581 L880 591 L920 592 L960 616 L1000 624 L1040 597 L1080 569 L1120 538 L1160 521 L1200 512 L1240 539 L1280 534 L1320 537 L1360 520 L1400 517 L1440 524 L1480 573 L1520 594 L1560 623 L1600 616 L1600 900 Z" fill="#462A1F" opacity="0.45"/><path d="M0 900 L0 620 L40 634 L80 650 L120 651 L160 645 L200 640 L240 650 L280 675 L320 708 L360 713 L400 724 L440 693 L480 670 L520 654 L560 667 L600 668 L640 678 L680 642 L720 617 L760 599 L800 607 L840 618 L880 653 L920 667 L960 674 L1000 669 L1040 656 L1080 675 L1120 695 L1160 720 L1200 722 L1240 701 L1280 681 L1320 645 L1360 638 L1400 645 L1440 656 L1480 642 L1520 632 L1560 606 L1600 613 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 620 L40 634 L80 650 L120 651 L160 645 L200 640 L240 650 L280 675 L320 708 L360 713 L400 724 L440 693 L480 670 L520 654 L560 667 L600 668 L640 678 L680 642 L720 617 L760 599 L800 607 L840 618 L880 653 L920 667 L960 674 L1000 669 L1040 656 L1080 675 L1120 695 L1160 720 L1200 722 L1240 701 L1280 681 L1320 645 L1360 638 L1400 645 L1440 656 L1480 642 L1520 632 L1560 606 L1600 613 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 620 L40 634 L80 650 L120 651 L160 645 L200 640 L240 650 L280 675 L320 708 L360 713 L400 724 L440 693 L480 670 L520 654 L560 667 L600 668 L640 678 L680 642 L720 617 L760 599 L800 607 L840 618 L880 653 L920 667 L960 674 L1000 669 L1040 656 L1080 675 L1120 695 L1160 720 L1200 722 L1240 701 L1280 681 L1320 645 L1360 638 L1400 645 L1440 656 L1480 642 L1520 632 L1560 606 L1600 613 L1600 900 Z" fill="#462A1F" opacity="0.7"/><path d="M0 900 L0 793 L40 800 L80 817 L120 829 L160 820 L200 799 L240 777 L280 771 L320 760 L360 774 L400 778 L440 765 L480 752 L520 735 L560 738 L600 751 L640 786 L680 799 L720 806 L760 797 L800 802 L840 795 L880 799 L920 813 L960 817 L1000 801 L1040 787 L1080 749 L1120 735 L1160 753 L1200 768 L1240 768 L1280 767 L1320 759 L1360 750 L1400 756 L1440 786 L1480 810 L1520 820 L1560 817 L1600 807 L1600 900 Z" fill="#F2E1CE"/><path d="M0 900 L0 793 L40 800 L80 817 L120 829 L160 820 L200 799 L240 777 L280 771 L320 760 L360 774 L400 778 L440 765 L480 752 L520 735 L560 738 L600 751 L640 786 L680 799 L720 806 L760 797 L800 802 L840 795 L880 799 L920 813 L960 817 L1000 801 L1040 787 L1080 749 L1120 735 L1160 753 L1200 768 L1240 768 L1280 767 L1320 759 L1360 750 L1400 756 L1440 786 L1480 810 L1520 820 L1560 817 L1600 807 L1600 900 Z" fill="#C65429" opacity="0.35"/><path d="M0 900 L0 793 L40 800 L80 817 L120 829 L160 820 L200 799 L240 777 L280 771 L320 760 L360 774 L400 778 L440 765 L480 752 L520 735 L560 738 L600 751 L640 786 L680 799 L720 806 L760 797 L800 802 L840 795 L880 799 L920 813 L960 817 L1000 801 L1040 787 L1080 749 L1120 735 L1160 753 L1200 768 L1240 768 L1280 767 L1320 759 L1360 750 L1400 756 L1440 786 L1480 810 L1520 820 L1560 817 L1600 807 L1600 900 Z" fill="#462A1F" opacity="0.95"/></svg>
+          <div class="app-card">
+            <div id="panel-1" class="app-panel" role="tabpanel" aria-labelledby="step-1" tabindex="0">
+              <p class="app-head">Investigations</p>
+              <p class="app-q">Question: detecting smoke from overheated plastics</p>
+              <ol class="app-rank">
+                <li><b>SAME</b><span>PSI-102</span></li>
+                <li><b>SAME-R</b><span>PSI-101</span></li>
+                <li><b>ACME BRE</b><span>PSI-20</span></li>
+              </ol>
+              <p class="app-note">Describe your question, rank all nine investigations, and read an AI summary that cites NASA PSI records.</p>
+              <a class="app-link" href="./investigations.html">Open Investigations</a>
+            </div>
+            <div id="panel-2" class="app-panel" role="tabpanel" aria-labelledby="step-2" tabindex="0" hidden>
+              <p class="app-head">Detector Evidence: Teflon</p>
+              <p class="app-big">The tested detector would have stayed below its alarm threshold in approximately two-thirds of the reported Teflon smoke tests.</p>
+              <p class="app-note"><b>Limitation:</b> this result applies to the conditions that were tested in the study.</p>
+              <a class="app-link" href="./detector-evidence.html">Open Detector Evidence</a>
+            </div>
+            <div id="panel-3" class="app-panel" role="tabpanel" aria-labelledby="step-3" tabindex="0" hidden>
+              <p class="app-head">Mean particle diameter</p>
+              <div class="app-bars">
+                <p><span>Kapton</span><i style="width: 23%"></i><b>105 nm</b></p>
+                <p class="aged"><span>Aged 720 s</span><i style="width: 41%"></i><b>186 nm</b></p>
+                <p><span>Silicone</span><i style="width: 57%"></i><b>257 nm</b></p>
+                <p class="aged"><span>Aged 720 s</span><i style="width: 94%"></i><b>422 nm</b></p>
+              </div>
+              <p class="app-note">SAME Final Science Report, Table 1. Particles grew with age for all four materials.</p>
+              <a class="app-link" href="./smoke-analysis.html">Open Smoke Analysis</a>
+            </div>
+            <div id="panel-4" class="app-panel" role="tabpanel" aria-labelledby="step-4" tabindex="0" hidden>
+              <p class="app-head">Proposed lunar follow-up</p>
+              <p class="app-big">Compare the same smoke detector and selected material in microgravity and simulated lunar gravity.</p>
+              <p class="app-note">Match airflow, smoke aging time, oxygen concentration, and pressure. Record the detector signal and whether and when it alarms.</p>
+              <a class="app-link" href="./smoke-analysis.html">Explore the evidence</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad" aria-labelledby="numbers-title">
+      <div class="wrap">
+        <p class="kicker">The evidence base</p>
+        <h2 id="numbers-title">What the records cover, and what they miss</h2>
+        <dl class="stat-grid">
+          <div class="stat"><dt>NASA investigations ranked</dt><dd>9</dd></div>
+          <div class="stat"><dt>Detector evidence records</dt><dd>4</dd></div>
+          <div class="stat"><dt>Particle size measurements</dt><dd>8</dd></div>
+          <div class="stat stat-gap"><dt>Lunar-gravity detector tests in these records</dt><dd>0</dd></div>
+        </dl>
+        <p class="callout">For lunar habitats, a key question is how smoke detectors respond at the Moon's gravity.
+          <a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/">Flame in Freefall challenge background</a></p>
+      </div>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <div class="wrap-wide">
+        <div class="vista cta-vista">
+          <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><rect width="1600" height="900" fill="#462A1F"/><g fill="#F2E4B1" opacity=".75"><circle cx="19" cy="32" r="2.6"/><circle cx="1118" cy="271" r="1.6"/><circle cx="746" cy="125" r="1.9"/><circle cx="1168" cy="134" r="1.2"/><circle cx="1223" cy="270" r="1.3"/><circle cx="589" cy="152" r="1.9"/><circle cx="474" cy="509" r="1.4"/><circle cx="1404" cy="99" r="1.2"/><circle cx="247" cy="151" r="1.9"/><circle cx="1219" cy="39" r="2.5"/><circle cx="886" cy="323" r="2.1"/><circle cx="1546" cy="325" r="2.5"/><circle cx="1324" cy="21" r="1.3"/><circle cx="571" cy="221" r="1.0"/><circle cx="141" cy="399" r="1.6"/><circle cx="683" cy="244" r="2.5"/><circle cx="1125" cy="358" r="1.5"/><circle cx="570" cy="72" r="1.2"/><circle cx="1461" cy="168" r="1.3"/><circle cx="1012" cy="175" r="1.1"/><circle cx="1095" cy="479" r="1.9"/><circle cx="1323" cy="341" r="2.5"/><circle cx="187" cy="276" r="2.0"/><circle cx="1426" cy="499" r="2.3"/><circle cx="951" cy="501" r="2.5"/><circle cx="878" cy="426" r="1.0"/><circle cx="826" cy="171" r="2.2"/><circle cx="879" cy="393" r="2.6"/><circle cx="892" cy="428" r="1.7"/><circle cx="1028" cy="384" r="1.9"/><circle cx="500" cy="123" r="1.0"/><circle cx="39" cy="491" r="2.3"/><circle cx="1009" cy="7" r="2.0"/><circle cx="952" cy="373" r="2.6"/><circle cx="445" cy="513" r="2.0"/><circle cx="1288" cy="325" r="2.3"/><circle cx="223" cy="517" r="1.8"/><circle cx="907" cy="84" r="1.6"/><circle cx="337" cy="423" r="2.4"/><circle cx="1177" cy="342" r="2.6"/><circle cx="975" cy="383" r="2.5"/><circle cx="783" cy="119" r="1.9"/><circle cx="1273" cy="444" r="1.3"/><circle cx="888" cy="248" r="1.8"/><circle cx="288" cy="130" r="1.7"/><circle cx="764" cy="89" r="1.0"/><circle cx="277" cy="13" r="1.2"/><circle cx="1402" cy="511" r="1.1"/><circle cx="279" cy="211" r="1.8"/><circle cx="1172" cy="191" r="1.6"/><circle cx="1266" cy="370" r="2.3"/><circle cx="848" cy="415" r="1.7"/><circle cx="900" cy="152" r="1.8"/><circle cx="1242" cy="42" r="1.4"/><circle cx="1323" cy="430" r="2.2"/><circle cx="688" cy="186" r="2.5"/><circle cx="402" cy="188" r="1.8"/><circle cx="1328" cy="210" r="2.6"/><circle cx="882" cy="227" r="1.5"/><circle cx="859" cy="152" r="2.4"/><circle cx="916" cy="513" r="2.3"/><circle cx="793" cy="227" r="2.1"/><circle cx="1490" cy="286" r="2.1"/><circle cx="260" cy="361" r="1.6"/><circle cx="976" cy="445" r="1.6"/><circle cx="473" cy="47" r="2.1"/><circle cx="1171" cy="502" r="1.5"/><circle cx="415" cy="35" r="2.2"/><circle cx="1482" cy="408" r="2.3"/><circle cx="1540" cy="118" r="2.6"/><circle cx="452" cy="280" r="1.6"/><circle cx="1142" cy="395" r="2.0"/><circle cx="1161" cy="323" r="2.0"/><circle cx="435" cy="433" r="1.8"/><circle cx="224" cy="376" r="1.7"/><circle cx="895" cy="287" r="2.4"/><circle cx="1525" cy="80" r="1.2"/><circle cx="459" cy="272" r="1.6"/><circle cx="1456" cy="446" r="1.8"/><circle cx="1453" cy="145" r="1.8"/><circle cx="1481" cy="351" r="2.3"/><circle cx="534" cy="473" r="2.6"/><circle cx="1348" cy="1" r="1.3"/><circle cx="1204" cy="54" r="1.1"/><circle cx="1459" cy="141" r="1.9"/><circle cx="419" cy="413" r="2.2"/><circle cx="92" cy="232" r="2.6"/><circle cx="132" cy="44" r="1.6"/><circle cx="1263" cy="359" r="1.4"/><circle cx="796" cy="55" r="1.8"/></g><circle cx="1400" cy="150" r="48" fill="#F2E1CE" opacity="1"/><circle cx="1422" cy="140" r="48" fill="#462A1F"/><path d="M0 900 L0 413 L40 445 L80 446 L120 453 L160 448 L200 451 L240 444 L280 482 L320 501 L360 520 L400 523 L440 514 L480 479 L520 480 L560 471 L600 479 L640 484 L680 465 L720 431 L760 409 L800 412 L840 418 L880 457 L920 466 L960 479 L1000 480 L1040 459 L1080 482 L1120 497 L1160 520 L1200 538 L1240 511 L1280 488 L1320 474 L1360 464 L1400 457 L1440 467 L1480 458 L1520 450 L1560 424 L1600 404 L1600 900 Z" fill="#462A1F"/><path d="M0 900 L0 413 L40 445 L80 446 L120 453 L160 448 L200 451 L240 444 L280 482 L320 501 L360 520 L400 523 L440 514 L480 479 L520 480 L560 471 L600 479 L640 484 L680 465 L720 431 L760 409 L800 412 L840 418 L880 457 L920 466 L960 479 L1000 480 L1040 459 L1080 482 L1120 497 L1160 520 L1200 538 L1240 511 L1280 488 L1320 474 L1360 464 L1400 457 L1440 467 L1480 458 L1520 450 L1560 424 L1600 404 L1600 900 Z" fill="#F2E1CE" opacity="0.07"/><path d="M0 900 L0 588 L40 603 L80 630 L120 631 L160 592 L200 570 L240 537 L280 536 L320 532 L360 537 L400 545 L440 530 L480 513 L520 499 L560 515 L600 559 L640 586 L680 596 L720 592 L760 583 L800 577 L840 587 L880 607 L920 622 L960 608 L1000 557 L1040 536 L1080 513 L1120 509 L1160 524 L1200 550 L1240 545 L1280 520 L1320 528 L1360 515 L1400 557 L1440 598 L1480 608 L1520 625 L1560 606 L1600 579 L1600 900 Z" fill="#462A1F"/><path d="M0 900 L0 588 L40 603 L80 630 L120 631 L160 592 L200 570 L240 537 L280 536 L320 532 L360 537 L400 545 L440 530 L480 513 L520 499 L560 515 L600 559 L640 586 L680 596 L720 592 L760 583 L800 577 L840 587 L880 607 L920 622 L960 608 L1000 557 L1040 536 L1080 513 L1120 509 L1160 524 L1200 550 L1240 545 L1280 520 L1320 528 L1360 515 L1400 557 L1440 598 L1480 608 L1520 625 L1560 606 L1600 579 L1600 900 Z" fill="#F2E1CE" opacity="0.1"/><path d="M0 900 L0 670 L40 691 L80 723 L120 716 L160 699 L200 675 L240 634 L280 628 L320 636 L360 650 L400 639 L440 628 L480 615 L520 604 L560 633 L600 648 L640 675 L680 688 L720 697 L760 674 L800 670 L840 679 L880 692 L920 695 L960 692 L1000 665 L1040 647 L1080 625 L1120 624 L1160 625 L1200 646 L1240 646 L1280 628 L1320 621 L1360 619 L1400 645 L1440 675 L1480 698 L1520 714 L1560 701 L1600 685 L1600 900 Z" fill="#462A1F"/><path d="M0 900 L0 670 L40 691 L80 723 L120 716 L160 699 L200 675 L240 634 L280 628 L320 636 L360 650 L400 639 L440 628 L480 615 L520 604 L560 633 L600 648 L640 675 L680 688 L720 697 L760 674 L800 670 L840 679 L880 692 L920 695 L960 692 L1000 665 L1040 647 L1080 625 L1120 624 L1160 625 L1200 646 L1240 646 L1280 628 L1320 621 L1360 619 L1400 645 L1440 675 L1480 698 L1520 714 L1560 701 L1600 685 L1600 900 Z" fill="#F2E1CE" opacity="0.16"/><path d="M0 900 L0 748 L40 748 L80 734 L120 762 L160 764 L200 773 L240 753 L280 752 L320 751 L360 778 L400 798 L440 819 L480 818 L520 803 L560 795 L600 796 L640 787 L680 806 L720 795 L760 780 L800 747 L840 730 L880 726 L920 748 L960 758 L1000 776 L1040 784 L1080 780 L1120 768 L1160 787 L1200 809 L1240 817 L1280 835 L1320 816 L1360 794 L1400 789 L1440 766 L1480 769 L1520 781 L1560 783 L1600 765 L1600 900 Z" fill="#462A1F"/><path d="M0 900 L0 748 L40 748 L80 734 L120 762 L160 764 L200 773 L240 753 L280 752 L320 751 L360 778 L400 798 L440 819 L480 818 L520 803 L560 795 L600 796 L640 787 L680 806 L720 795 L760 780 L800 747 L840 730 L880 726 L920 748 L960 758 L1000 776 L1040 784 L1080 780 L1120 768 L1160 787 L1200 809 L1240 817 L1280 835 L1320 816 L1360 794 L1400 789 L1440 766 L1480 769 L1520 781 L1560 783 L1600 765 L1600 900 Z" fill="#F2E1CE" opacity="0.22"/></svg>
+          <div class="cta-in">
+            <p class="kicker kicker-light">Start here</p>
+            <h2 id="cta-title">Find out when the alarm might stay quiet.</h2>
+            <p>Read the detector evidence by material, then ask your own question of the records.</p>
+            <div class="actions actions-center">
+              <a class="button button-gold" href="./detector-evidence.html">Explore detector evidence</a>
+              <a class="button button-outline-gold" href="./smoke-analysis.html#ask-title">Ask your own question</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <script type="module">
-    import { downloadCsv } from "./csv.js";
-    import { setAnalysisEvidence } from "./evidence-analysis.js";
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <p class="foot-name">Silent Alarm</p>
+          <p>Smoke detector evidence from NASA research, built by Team Heat Sync for the NASA Space Apps
+            Challenge 2026.</p>
+          <p class="small">AI summaries cite the records they use. The Heat Sync logo artwork is AI-generated.</p>
+        </div>
+        <div>
+          <p class="foot-head">Pages</p>
+          <ul>
+            <li><a href="./">Home</a></li>
+            <li><a href="./investigations.html">Investigations</a></li>
+            <li><a href="./detector-evidence.html">Detector Evidence</a></li>
+            <li><a href="./smoke-analysis.html">Smoke Analysis</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-head">Sources</p>
+          <ul>
+            <li><a href="https://psi.nasa.gov/physci/repo/data/investigations/PSI-102">NASA PSI: SAME</a></li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/#F9">SAME detector study</a></li>
+            <li><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=904707">SAME Final Science Report</a></li>
+            <li><a href="https://ntrs.nasa.gov/citations/20250010653">LUCI flight results</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-head">Challenge</p>
+          <ul>
+            <li><a href="https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/">Flame in Freefall</a></li>
+            <li>Team Heat Sync</li>
+          </ul>
+        </div>
+      </div>
+      <p class="foot-word" aria-hidden="true">Silent Alarm</p>
+      <div class="foot-bottom">
+        <span>Team Heat Sync, NASA Space Apps Challenge 2026</span>
+        <span>Data: NASA PSI, PMC, NIST, NTRS</span>
+      </div>
+    </div>
+  </footer>
 
-    const materialSelect = document.querySelector("#material");
-    const status = document.querySelector("#status");
-    const detectorCard = document.querySelector("#detector-card");
-    const testCard = document.querySelector("#test-card");
-    const downloadButton = document.querySelector("#download-csv");
-    let visibleRecords = [];
-
-    function showEvidence(records) {
-      const material = materialSelect.value;
-
-      const detector = records.find(record =>
-        record.material === material &&
-        record.evidence_type === "detector_response"
-      );
-
-      const test = records.find(record =>
-        record.material === material &&
-        record.evidence_type === "test_conditions"
-      );
-
-      visibleRecords = [detector, test].filter(Boolean);
-      downloadButton.disabled = visibleRecords.length === 0;
-
-      detectorCard.hidden = !detector;
-      testCard.hidden = !test;
-      status.textContent = "";
-
-      if (detector) {
-        document.querySelector("#detector-name").textContent = detector.detector;
-        document.querySelector("#detector-result").textContent = detector.reported_result;
-        document.querySelector("#detector-limit").textContent = detector.limitation;
-        document.querySelector("#detector-source").href = detector.source_url;
-        status.textContent = "Showing evidence for " + material + ".";
-      } else {
-        status.textContent = "No detector finding is available for " + material + ".";
-      }
-
-      if (test) {
-        document.querySelector("#test-conditions").textContent = test.conditions;
-        document.querySelector("#test-limit").textContent = test.limitation;
-        document.querySelector("#test-source").href = test.source_url;
-      }
-    }
-
-    function downloadDetectorCsv(records, material) {
-      const columns = [
-        ["Material", "material"],
-        ["Evidence type", "evidence_type"],
-        ["Finding", "reported_result"],
-        ["Test conditions", "conditions"],
-        ["Limitation", "limitation"],
-        ["Source URL", "source_url"]
-      ];
-
-      const header = columns.map(column => column[0]);
-      const rows = records.map(record =>
-        columns.map(column => record[column[1]])
-      );
-      downloadCsv([header, ...rows], "silent-alarm-" + material.toLowerCase() + ".csv");
-    }
-
-    downloadButton.addEventListener("click", () => {
-      downloadDetectorCsv(visibleRecords, materialSelect.value);
-    });
-
-    async function loadEvidence() {
-      try {
-        const response = await fetch("./data/evidence.json");
-
-        if (!response.ok) {
-          throw new Error("Could not load evidence.json.");
-        }
-
-        const records = await response.json();
-
-        if (!Array.isArray(records)) {
-          throw new Error("Expected a list of evidence records.");
-        }
-
-        showEvidence(records);
-        setAnalysisEvidence(records);
-        materialSelect.addEventListener("change", () => showEvidence(records));
-        materialSelect.disabled = false;
-      } catch (error) {
-        status.textContent = "Could not load the evidence. Check public/data/evidence.json.";
-        console.error(error);
-      }
-    }
-
-    loadEvidence();
-  </script>
-  <script type="module" src="./investigations.js"></script>
-  <script type="module" src="./evidence-ask.js"></script>
-  <script type="module" src="./particle-sizes.js"></script>
+  <script type="module" src="./home.js?v=3"></script>
 </body>
 
 </html>
