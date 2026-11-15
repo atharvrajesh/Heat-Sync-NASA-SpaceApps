@@ -76,6 +76,9 @@ def tidy(text):
     # the model likes fancy hyphens, which break the id check
     for dash in "‐‑‒–—":
         text = text.replace(dash, "-")
+    # it also sometimes writes wide brackets around record ids
+    for wide, plain in (("\u3010", "["), ("\u3011", "]"), ("\uff3b", "["), ("\uff3d", "]")):
+        text = text.replace(wide, plain)
     return text.strip()
 
 
@@ -119,6 +122,9 @@ def answer_evidence(question):
     try:
         known = load_evidence()
         raw = ask_model(question, list(known.values()), EVIDENCE_INSTRUCTIONS)
+        if not raw:
+            # the model sometimes spends its budget thinking and returns nothing, so try once more
+            raw = ask_model(question, list(known.values()), EVIDENCE_INSTRUCTIONS)
     except Exception as error:
         print("evidence answer failed:", error)
         return reply(502, {"error": "The model is unavailable."})
@@ -128,7 +134,8 @@ def answer_evidence(question):
     cited = set(re.findall(r"\[([a-z0-9-]+)\]", answer))
     if not cited or not cited <= set(known):
         print("dropped evidence answer:", raw)
-        return reply(200, {"answer": "", "ids": [], "gap": True})
+        reason = "no_evidence" if "NO_EVIDENCE" in raw else ("empty" if not raw else "uncited")
+        return reply(200, {"answer": "", "ids": [], "gap": True, "reason": reason, "dropped": raw[:400]})
 
     return reply(200, {"answer": answer, "ids": sorted(cited), "gap": False})
 
