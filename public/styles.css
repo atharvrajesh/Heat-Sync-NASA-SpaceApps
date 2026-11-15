@@ -164,10 +164,6 @@ h3 {
   font-weight: 600;
 }
 
-.brand-credit {
-  font-size: 14px;
-}
-
 .site-nav ul {
   display: flex;
   flex-wrap: wrap;
@@ -1033,6 +1029,7 @@ button:disabled {
 #inv-answer {
   margin: 8px 0 0;
   font-size: 20px;
+  font-weight: 700;
   max-width: 72ch;
 }
 
@@ -1414,6 +1411,7 @@ button:disabled {
 #ask-answer {
   margin: 24px 0 0;
   font-size: 20px;
+  font-weight: 700;
   max-width: 72ch;
 }
 
