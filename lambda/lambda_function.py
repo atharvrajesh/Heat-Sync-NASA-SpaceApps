@@ -25,7 +25,10 @@ EVIDENCE_INSTRUCTIONS = (
     "End every sentence with the id of the record it came from in square brackets, like [teflon-iss-alarm]. "
     "Stay close to the wording of the records and keep each record's limitation in mind. "
     "Do not add numbers, names, effects, or facts that are not in the records. "
-    "If the records do not answer the question, reply only with: NO_EVIDENCE"
+    "Treat a yes-or-no question as asking what the records report, and answer with that finding. "
+    "For example, if asked whether a detector caught, detected, or alarmed for a material, "
+    "report what that material's record says about the alarm threshold. "
+    "Reply only with NO_EVIDENCE when no record is about the material, detector, or condition asked about."
 )
 
 records_by_id = None
@@ -120,10 +123,8 @@ def answer_evidence(question):
         print("evidence answer failed:", error)
         return reply(502, {"error": "The model is unavailable."})
 
-    if "NO_EVIDENCE" in raw:
-        return reply(200, {"answer": "", "ids": [], "gap": True})
-
-    answer = keep_cited(raw, r"\[[a-z0-9-]+\]")
+    # keep any cited sentences even if the model also wrote NO_EVIDENCE somewhere
+    answer = keep_cited(raw.replace("NO_EVIDENCE", ""), r"\[[a-z0-9-]+\]")
     cited = set(re.findall(r"\[([a-z0-9-]+)\]", answer))
     if not cited or not cited <= set(known):
         print("dropped evidence answer:", raw)
