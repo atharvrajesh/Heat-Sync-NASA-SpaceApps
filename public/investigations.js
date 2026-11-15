@@ -1,4 +1,4 @@
-import { rankEvidence } from "./evidence-analysis.js?v=3";
+import { rankEvidence } from "./evidence-analysis.js?v=4";
 
 const questionInput = document.querySelector("#inv-question");
 const rankButton = document.querySelector("#inv-rank");

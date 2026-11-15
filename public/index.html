@@ -127,8 +127,8 @@
           <h2 id="how-title">What Silent Alarm does</h2>
           <p class="how-text">Silent Alarm is for spacecraft fire-safety researchers. It ranks NASA's
             microgravity combustion investigations for your question, summarizes the top
-            matches with AI, shows the detector evidence with its limits, and proposes
-            the next test to run.</p>
+            matches with AI, shows the detector evidence with its limits, maps where
+            that evidence stops, and proposes the test that would fill each gap.</p>
           <div class="steps" role="tablist" aria-label="Silent Alarm tools" aria-orientation="vertical">
             <button type="button" class="step" role="tab" id="step-1" aria-controls="panel-1" aria-selected="true">
               <span class="step-num">01</span><span class="step-title">Rank NASA investigations</span></button>
@@ -137,7 +137,7 @@
             <button type="button" class="step" role="tab" id="step-3" aria-controls="panel-3" aria-selected="false" tabindex="-1">
               <span class="step-num">03</span><span class="step-title">See how smoke ages</span></button>
             <button type="button" class="step" role="tab" id="step-4" aria-controls="panel-4" aria-selected="false" tabindex="-1">
-              <span class="step-num">04</span><span class="step-title">Propose the next test</span></button>
+              <span class="step-num">04</span><span class="step-title">Find the gaps and the next test</span></button>
           </div>
         </div>
 
@@ -173,10 +173,16 @@
               <a class="app-link" href="./smoke-analysis.html">Open Smoke Analysis</a>
             </div>
             <div id="panel-4" class="app-panel" role="tabpanel" aria-labelledby="step-4" tabindex="0" hidden>
-              <p class="app-head">Proposed lunar follow-up</p>
-              <p class="app-big">Compare the same smoke detector and selected material in microgravity and simulated lunar gravity.</p>
-              <p class="app-note">Match airflow, smoke aging time, oxygen concentration, and pressure. Record the detector signal and whether and when it alarms.</p>
-              <a class="app-link" href="./smoke-analysis.html">Explore the evidence</a>
+              <p class="app-head">Evidence gap map</p>
+              <div class="app-gaps" aria-hidden="true">
+                <span></span><b>ISS</b><b>Moon</b><b>Mars</b>
+                <b>Teflon</b><i class="covered"></i><i></i><i></i>
+                <b>Kapton</b><i class="covered"></i><i></i><i></i>
+                <b>Cotton</b><i class="partial"></i><i></i><i></i>
+                <b>Silicone</b><i class="partial"></i><i></i><i></i>
+              </div>
+              <p class="app-note">Detector results exist only for Teflon and Kapton in ISS microgravity. Every other square is a gap, and each one comes with the test that would fill it.</p>
+              <a class="app-link" href="./smoke-analysis.html#gap-title">Open the gap map</a>
             </div>
           </div>
         </div>
@@ -259,7 +265,7 @@
     </div>
   </footer>
 
-  <script type="module" src="./home.js?v=3"></script>
+  <script type="module" src="./home.js?v=4"></script>
 </body>
 
 </html>

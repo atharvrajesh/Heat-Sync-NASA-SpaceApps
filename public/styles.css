@@ -1375,6 +1375,10 @@ button:disabled {
   gap: 16px;
 }
 
+.result-list:empty {
+  display: none;
+}
+
 .result-list li {
   padding: 16px 24px;
   background: var(--cream);
@@ -1442,6 +1446,197 @@ button:disabled {
   padding: 16px 24px;
   background: var(--cream);
   border-left: 4px solid var(--orange);
+}
+
+/* evidence gap map */
+.gap-section {
+  padding: 16px 0 48px;
+}
+
+.gap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+}
+
+.gap-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gap-key {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border: 1px solid var(--walnut);
+  border-radius: 4px;
+  background: var(--cream);
+}
+
+.gap-key.covered {
+  background: var(--walnut);
+}
+
+.gap-key.partial {
+  background: var(--gold);
+}
+
+.gap-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.gap-scroll {
+  overflow-x: auto;
+}
+
+.gap-map {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 16px;
+}
+
+.gap-map th {
+  padding: 8px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.gap-map thead th {
+  font-family: var(--heading);
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  vertical-align: bottom;
+}
+
+.gap-map tbody th {
+  white-space: nowrap;
+}
+
+.gap-map td {
+  padding: 0;
+}
+
+.gap-cell {
+  width: 100%;
+  min-height: 64px;
+  padding: 8px 12px;
+  border: 1px solid var(--walnut);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.gap-cell.covered {
+  background: var(--walnut);
+  color: var(--gold);
+}
+
+.gap-cell.partial {
+  background: var(--gold);
+  color: var(--walnut);
+}
+
+.gap-cell.gap {
+  background: var(--cream);
+  color: var(--walnut);
+}
+
+.gap-cell.covered:hover:not(:disabled) {
+  background: rgba(70, 42, 31, 0.88);
+}
+
+.gap-cell.partial:hover:not(:disabled),
+.gap-cell.gap:hover:not(:disabled) {
+  background: var(--gold);
+  text-decoration: underline;
+}
+
+/* selected square gets the orange indicator */
+.gap-cell[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 4px var(--orange);
+}
+
+.gap-detail {
+  padding: 24px;
+}
+
+.gap-detail h3,
+.ask-gap h3 {
+  margin-bottom: 4px;
+  font-size: 28px;
+}
+
+.gap-label {
+  margin: 16px 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gap-detail p,
+.ask-gap p {
+  margin-bottom: 8px;
+}
+
+.ask-gap {
+  margin-top: 24px;
+  padding: 16px 24px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--orange);
+  border-radius: 8px;
+}
+
+.gap-jump {
+  font-weight: 700;
+}
+
+.label-short {
+  display: none;
+}
+
+.gap-lead {
+  font-weight: 700;
+}
+
+.app-gaps {
+  display: grid;
+  grid-template-columns: 72px repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.app-gaps b {
+  align-self: center;
+}
+
+.app-gaps i {
+  height: 24px;
+  border: 1px solid var(--walnut);
+  border-radius: 4px;
+  background: var(--cream);
+}
+
+.app-gaps i.covered {
+  background: var(--walnut);
+}
+
+.app-gaps i.partial {
+  background: var(--gold);
 }
 
 /* footer */
@@ -1523,7 +1718,8 @@ button:disabled {
   .findings,
   .evidence-grid,
   .tool-list,
-  .how-grid {
+  .how-grid,
+  .gap-layout {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -1657,6 +1853,29 @@ button:disabled {
 
   .inv-details dd {
     margin-bottom: 8px;
+  }
+
+  .gap-cell {
+    min-height: 56px;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .label-long {
+    display: none;
+  }
+
+  .label-short {
+    display: inline;
+  }
+
+  .gap-map thead th {
+    font-size: 16px;
+  }
+
+  .gap-map tbody th {
+    white-space: normal;
+    font-size: 15px;
   }
 
   .particle-bar,
